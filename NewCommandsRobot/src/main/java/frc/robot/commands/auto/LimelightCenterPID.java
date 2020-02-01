@@ -13,10 +13,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.PIDDrivetrain;
 
-public class LimelightCenter extends CommandBase {
+public class LimelightCenterPID extends CommandBase {
 
-  private final Drivetrain drivetrain;
+  private final PIDDrivetrain drivetrain;
 
   NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry xOffset = limelight.getEntry("tx");
@@ -26,7 +27,7 @@ public class LimelightCenter extends CommandBase {
   /**
    * Creates a new LimelightCenter.
    */
-  public LimelightCenter(Drivetrain drivetrain) {
+  public LimelightCenterPID(PIDDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -35,54 +36,20 @@ public class LimelightCenter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivetrain.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    final double minimumSpeed = SmartDashboard.getNumber("Minimum Speed", 0.20);
     
-    double drivetrainSpeed = .5; 
-    //Gets centering tolerance from SmartDashboard
-    double tolerance = SmartDashboard.getNumber("Tolerance", 1.5);
-    
-    //Slows the robot when gets close to target
-    if(Math.abs(xOffset.getDouble(0.0)) < 7.5){
-      drivetrainSpeed = 0.225;
-    }
-
-    if(Math.abs( xOffset.getDouble(0.0) ) < tolerance ) {
-      if(Math.abs( xOffset.getDouble(0.0) ) > 0.5) {
-        // slow even more when very close, between 1.5 and 0.5
-        drivetrainSpeed = minimumSpeed;
-      } else {
-        // within 0.5 so stop/coast
-        drivetrain.drive(0.0, 0.0);
-      } 
-    }
-
-    //Checks if speed is too low
-    if(drivetrainSpeed < minimumSpeed){
-      drivetrainSpeed = minimumSpeed;
-    }
-    
-    SmartDashboard.putNumber("Speed", drivetrainSpeed);
-    SmartDashboard.putNumber("X Offset", xOffset.getDouble(0.0));
-    //Checks offsets of center of target and moves robot to center 
-
-    if(xOffset.getDouble(0.0) > tolerance) {
-        // Turn right
-      drivetrain.drive(drivetrainSpeed, -drivetrainSpeed);
-    } else if(xOffset.getDouble(0.0) < -tolerance) {
-        // Turn left
-        drivetrain.drive(-drivetrainSpeed, drivetrainSpeed);
-    } 
     
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.disable();
   }
 
   // Returns true when the command should end.

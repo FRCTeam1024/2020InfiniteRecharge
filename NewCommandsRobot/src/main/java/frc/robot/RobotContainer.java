@@ -7,16 +7,22 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.auto.LimelightCenter;
+import frc.robot.commands.auto.LimelightCenterPID;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PIDDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 /**
@@ -28,11 +34,13 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
+  // private final PIDDrivetrain drivetrainPID = new PIDDrivetrain();
 
   public Joystick leftJoystick = new Joystick(0);
   public Joystick rightJoystick = new Joystick(1);
 
   private final Command m_autoCommand = new LimelightCenter(drivetrain);
+  // private final Command limelightCenterPID = new LimelightCenterPID(drivetrainPID);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
   
 
@@ -53,6 +61,46 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    // SmartDashboard.putData("Limelight Center PID", new InstantCommand(drivetrainPID::enable, drivetrainPID));
+
+    NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry xOffset = limelight.getEntry("tx");
+    PIDController pidController = new PIDController(PIDDrivetrain.Kp, PIDDrivetrain.Ki, PIDDrivetrain.Kd);
+    SmartDashboard.putData("Limelight Center PID", new PIDCommand(
+        pidController, 
+        () -> { 
+          System.out.println("xOffset : " + xOffset.getDouble(0.0));
+          return xOffset.getDouble(0.0);
+        }, 
+        0.0, 
+        output -> {
+          System.out.println("output : " + output);
+          double minPower = .2;
+          double maxPower = 0.95;
+          double tolerance = .2;
+          double finalPower = minPower + Math.abs(output);
+          if(finalPower < minPower) {
+            finalPower = minPower;
+          }
+          if(finalPower > maxPower) {
+            finalPower = maxPower;
+          }
+          if(Math.abs(xOffset.getDouble(0.0)) <= tolerance) {
+            if(Math.abs(xOffset.getDouble(0.0)) < tolerance +.05 ) {
+              finalPower = 0;
+            }
+          }
+          System.out.println("finalPower : " + finalPower);
+          if(output < 0) { // we want to turn right
+            drivetrain.drive(finalPower, -finalPower);
+          } else {
+            drivetrain.drive(-finalPower, finalPower);
+          }
+          
+        }, 
+        drivetrain));
+
     SmartDashboard.putData("Move Command", new StartEndCommand(
                               // start driving forward
                               () -> drivetrain.driveForward(.25),
@@ -73,6 +121,8 @@ public class RobotContainer {
                               // this is a command decorator; a convenience method
                             .withTimeout(1));
 
+    // example of an in-line, sequential command
+    // this is another way to do a CommandGroup of sequential commands
     SmartDashboard.putData("MoveTurn Command", new StartEndCommand(
                               // start driving forward
                               () -> drivetrain.driveForward(.30),
@@ -102,5 +152,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
+    // return limelightCenterPID;
   }
 }

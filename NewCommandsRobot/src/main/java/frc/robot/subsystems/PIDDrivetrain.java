@@ -11,12 +11,21 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Drivetrain extends SubsystemBase {
+public class PIDDrivetrain extends PIDSubsystem {
+
+  public static final double Kp = 0.0225;
+  public static final double Ki = 0.001;
+  public static final double Kd = 0.00275;
 
   private WPI_TalonSRX frontRight;
   private WPI_TalonSRX middleRight;
@@ -25,11 +34,15 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonSRX middleLeft;
   private WPI_TalonSRX rearLeft;
   public AHRS ahrs;
+
+  NetworkTable limelight;
+
     
   /**
    * Creates a new Drivetrain.
    */
-  public Drivetrain() {
+  public PIDDrivetrain() {
+    super(new PIDController(Kp, Ki, Kd));
     frontRight = new WPI_TalonSRX(5);
     middleRight = new WPI_TalonSRX(8);
     rearRight = new WPI_TalonSRX(9);
@@ -39,6 +52,30 @@ public class Drivetrain extends SubsystemBase {
 
     // ahrs = new AHRS(SerialPort.Port.kMXP); // when using the wide cable or sitting directly on rio
     ahrs = new AHRS(SerialPort.Port.kUSB);
+
+    limelight = NetworkTableInstance.getDefault().getTable("limelight");
+
+    setSetpoint(0.0);
+  }
+
+  private void log(String msg) {
+    System.out.println(msg);
+  }
+
+  @Override
+  protected double getMeasurement() {
+    NetworkTableEntry xOffset = limelight.getEntry("tx");
+    double xOffsetDouble = xOffset.getDouble(0.0);
+    log("xOffset : " + xOffsetDouble);
+    return xOffsetDouble;
+  }
+
+  @Override
+  protected void useOutput(double output, double setpoint) {
+    // TODO Auto-generated method stub
+    log("PIDSubsystem useOutput and setpoint : " + output + ", " + setpoint);
+    // TODO set drive with this?
+    drive(output, -output);
   }
 
   @Override
