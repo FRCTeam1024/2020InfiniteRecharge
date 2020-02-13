@@ -9,16 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Sensors;
 
 public class TurnToAngle extends CommandBase {
   Drivetrain drivetrain;
+  Sensors sensors;
   double startHeading;
   int targetAngle;
   /**
    * Creates a new TurnToAngle.
    */
-  public TurnToAngle(int targetAngle, Drivetrain drivetrain) {
+  public TurnToAngle(int targetAngle, Drivetrain drivetrain, Sensors sensors) {
     this.drivetrain = drivetrain;
+    this.sensors = sensors;
     this.targetAngle = targetAngle;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
@@ -27,7 +30,8 @@ public class TurnToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startHeading = drivetrain.getHeading();
+    sensors.resetGyro();
+    startHeading = sensors.getHeading();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,6 +49,7 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // 5 is our tolerance; gives some time to coast into target and not overshoot
+    return Math.abs(sensors.getHeading() - targetAngle) < 5;
   }
 }

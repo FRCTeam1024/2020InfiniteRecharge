@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -38,7 +39,7 @@ public class Drivetrain extends SubsystemBase {
     rearLeft = new WPI_TalonSRX(4);
 
     // ahrs = new AHRS(SerialPort.Port.kMXP); // when using the wide cable or sitting directly on rio
-    ahrs = new AHRS(SerialPort.Port.kUSB);
+    // ahrs = new AHRS(SerialPort.Port.kUSB1);
   }
 
   @Override
@@ -61,10 +62,55 @@ public class Drivetrain extends SubsystemBase {
     rearRight.set(ControlMode.PercentOutput, -rightPower);
   }
 
+  public void setBrakeMode() {
+    frontLeft.setNeutralMode(NeutralMode.Brake);
+    middleLeft.setNeutralMode(NeutralMode.Brake);
+    rearLeft.setNeutralMode(NeutralMode.Brake);
+    frontRight.setNeutralMode(NeutralMode.Brake);
+    middleRight.setNeutralMode(NeutralMode.Brake);
+    rearRight.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void setCoastMode() {
+    frontLeft.setNeutralMode(NeutralMode.Coast);
+    middleLeft.setNeutralMode(NeutralMode.Coast);
+    rearLeft.setNeutralMode(NeutralMode.Coast);
+    frontRight.setNeutralMode(NeutralMode.Coast);
+    middleRight.setNeutralMode(NeutralMode.Coast);
+    rearRight.setNeutralMode(NeutralMode.Coast);
+  }
+
   public void turnRight(double power) {
     // 0.20 is around min power to move
     // set a little power for the inner wheel, makes it easier to turn
     drive(-0.00, -power);
+  }
+  
+  public void pivotTurnRightAngle(double leftPower, double rightPower, double targetAngle) {
+    // 0.20 is around min power to move
+    // set a little power for the inner wheel, makes it easier to turn
+   // ahrs.reset();
+    if(ahrs.getYaw() < targetAngle){
+      drive(leftPower, -rightPower);
+    } else if(ahrs.getYaw() >= targetAngle){
+      drive(0.0, 0.0);
+    }
+  }
+  
+  public void pivotTurnLeftAngle(double leftPower, double rightPower, double targetAngle) {
+    // 0.20 is around min power to move
+    // set a little power for the inner wheel, makes it easier to turn
+    drive(-leftPower, rightPower);
+  }
+  
+  public void pivotTurnRight(double leftPower, double rightPower){
+    drive(leftPower, -rightPower);
+
+  }
+  
+  public void pivotTurnLeft(double leftPower, double rightPower){
+    drive(-leftPower, rightPower);
+
   }
 
   public void turnLeft(double power) {
@@ -97,7 +143,8 @@ public class Drivetrain extends SubsystemBase {
 
       // if it's yaw, may have to do some calculations, if yaw is in range of -180 to 180, 
       // instead of 0 - 360
-      return ahrs.getYaw();
+      // return ahrs.getYaw();
+      return 0;
   }
 
   public void resetGyro() {
@@ -109,7 +156,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Left Encoder Raw", -frontLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("Right Encoder Distance (IN)", -getRightEncoderInches());
     SmartDashboard.putNumber("Right Encoder Raw", -frontRight.getSelectedSensorPosition());
-    SmartDashboard.putNumber("IMU_CompassHeading", ahrs.getCompassHeading());
-    SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
+    // SmartDashboard.putNumber("IMU_CompassHeading", ahrs.getCompassHeading());
+    // SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
   }
 }

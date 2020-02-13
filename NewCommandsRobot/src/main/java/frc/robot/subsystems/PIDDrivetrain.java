@@ -51,7 +51,7 @@ public class PIDDrivetrain extends PIDSubsystem {
     rearLeft = new WPI_TalonSRX(4);
 
     // ahrs = new AHRS(SerialPort.Port.kMXP); // when using the wide cable or sitting directly on rio
-    ahrs = new AHRS(SerialPort.Port.kUSB);
+    // ahrs = new AHRS(SerialPort.Port.kUSB);
 
     limelight = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -64,6 +64,7 @@ public class PIDDrivetrain extends PIDSubsystem {
 
   @Override
   protected double getMeasurement() {
+    log("getMeasurement");
     NetworkTableEntry xOffset = limelight.getEntry("tx");
     double xOffsetDouble = xOffset.getDouble(0.0);
     log("xOffset : " + xOffsetDouble);
@@ -134,7 +135,8 @@ public class PIDDrivetrain extends PIDSubsystem {
 
       // if it's yaw, may have to do some calculations, if yaw is in range of -180 to 180, 
       // instead of 0 - 360
-      return ahrs.getYaw();
+      // return ahrs.getYaw();
+      return 0;
   }
 
   public void resetGyro() {
@@ -146,7 +148,7 @@ public class PIDDrivetrain extends PIDSubsystem {
     SmartDashboard.putNumber("Left Encoder Raw", -frontLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("Right Encoder Distance (IN)", -getRightEncoderInches());
     SmartDashboard.putNumber("Right Encoder Raw", -frontRight.getSelectedSensorPosition());
-    SmartDashboard.putNumber("IMU_CompassHeading", ahrs.getCompassHeading());
-    SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
+    // SmartDashboard.putNumber("IMU_CompassHeading", ahrs.getCompassHeading());
+    // SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
   }
 }

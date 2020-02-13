@@ -14,11 +14,22 @@ import frc.robot.subsystems.Drivetrain;
 public class TurnGyroRight extends CommandBase {
   /**
    * Creates a new TurnGyroRight.
+   * 
    */
   Drivetrain drivetrain;
+  double leftPower;
+  double rightPower;
+  double targetAngle;
+  boolean isFinished;
+  double slowDownTolerance;
 
-  public TurnGyroRight(Drivetrain drivetrain) {
+  public TurnGyroRight(Drivetrain drivetrain, double leftPower, double rightPower, double targetAngle) {
     this.drivetrain = drivetrain;
+    this.leftPower = leftPower;
+    this.rightPower = rightPower;
+    this.targetAngle = targetAngle;
+    slowDownTolerance = 10;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -26,22 +37,34 @@ public class TurnGyroRight extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    drivetrain.ahrs.reset();
     
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(drivetrain.ahrs.getYaw() < targetAngle){
+      drivetrain.pivotTurnRight(leftPower, rightPower);
+      isFinished = false;
+    } else if (drivetrain.ahrs.getYaw() > targetAngle - slowDownTolerance){
+      drivetrain.pivotTurnRight(0.2, 0.2);
+    }
+    else if(drivetrain.ahrs.getYaw() >= targetAngle){
+      isFinished = true;
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.drive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

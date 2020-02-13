@@ -8,7 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-
+//Do we even really need this anymore?? I think everything is declared in RobotContainer
 /**
  * Add your docs here.
  */
@@ -18,8 +18,8 @@ public class OI {
     public Joystick rightJoystick;
     
     public OI() {
-        rightJoystick = new Joystick(0);
-        leftJoystick = new Joystick(2);
+        rightJoystick = new Joystick(2);
+        leftJoystick = new Joystick(0);
     }
 
     public Joystick getLeftJoystick() {
