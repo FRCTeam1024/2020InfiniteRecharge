@@ -21,7 +21,7 @@ public class Shooter extends SubsystemBase {
    * Creates a new Shooter.
    */
   public Shooter() {
-    shooterOne = new CANSparkMax(47, MotorType.kBrushless);
+    shooterOne = new CANSparkMax(39, MotorType.kBrushless);
     shooterTwo = new CANSparkMax(37, MotorType.kBrushless);
     shooterEncoderOne = shooterOne.getEncoder();
     shooterEncoderTwo = shooterTwo.getEncoder();

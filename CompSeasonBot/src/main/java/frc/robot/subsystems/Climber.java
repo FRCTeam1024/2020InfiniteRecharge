@@ -16,14 +16,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   
   
-  public final WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(14);
   public final WPI_TalonSRX climberMotorOne = new WPI_TalonSRX(7);
+  public final WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(14);
   /**
    * Creates a new Climber.
    */
   public Climber() {
-    WPI_TalonSRX climberMotorOne = new WPI_TalonSRX(7);
-    WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(14);
+    
   }
   
   public void moveClimber(double motorSpeed){

@@ -17,6 +17,7 @@ public class RunClimber extends CommandBase {
   public RunClimber(Climber climber) {
     this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.

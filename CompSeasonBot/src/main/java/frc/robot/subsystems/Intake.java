@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
    */
   private WPI_TalonSRX intakeMotor;
 
-  private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
+  // private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
 
   public Intake() {
     intakeMotor = new WPI_TalonSRX(1);
@@ -35,10 +35,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(0.0);
   }
   public void extendIntake(){
-    intakeSolenoid.set(kForward);
+    // intakeSolenoid.set(kForward);
   }
   public void retractIntake(){
-    intakeSolenoid.set(kReverse);
+    // intakeSolenoid.set(kReverse);
   }
 
 

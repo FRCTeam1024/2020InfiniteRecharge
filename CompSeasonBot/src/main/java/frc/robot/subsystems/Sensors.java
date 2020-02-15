@@ -20,7 +20,7 @@ public class Sensors extends SubsystemBase {
    * Creates a new Sensors.
    */
   public Sensors() {
-    ahrs = new AHRS(SerialPort.Port.kUSB);
+    // ahrs = new AHRS(SerialPort.Port.kUSB);
   }
 
   public float getHeading() {

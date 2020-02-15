@@ -26,10 +26,10 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new Drivetrain.
    */
   public Drivetrain() {
-    frontRight = new WPI_TalonSRX(10);
+    frontRight = new WPI_TalonSRX(20);
     middleRight = new WPI_TalonSRX(11);
     rearRight = new WPI_TalonSRX(4);
-    frontLeft = new WPI_TalonSRX(9);
+    frontLeft = new WPI_TalonSRX(6);
     middleLeft = new WPI_TalonSRX(5);
     rearLeft = new WPI_TalonSRX(8);
   }
@@ -60,17 +60,6 @@ public class Drivetrain extends SubsystemBase {
     drive(-0.00, -power);
   }
   
-  public void pivotTurnRightAngle(double leftPower, double rightPower, double targetAngle) {
-    // 0.20 is around min power to move
-    // set a little power for the inner wheel, makes it easier to turn
-   // ahrs.reset();
-    if(ahrs.getYaw() < targetAngle){
-      drive(leftPower, -rightPower);
-    } else if(ahrs.getYaw() >= targetAngle){
-      drive(0.0, 0.0);
-    }
-  }
-  
   public void pivotTurnLeftAngle(double leftPower, double rightPower, double targetAngle) {
     // 0.20 is around min power to move
     // set a little power for the inner wheel, makes it easier to turn
@@ -96,20 +85,20 @@ public class Drivetrain extends SubsystemBase {
 		drive(0.0, 0.0);
   }
 
-  public double getLeftEncoderInches() {
-    return frontLeft.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
-    //wheel diameter: 6 in
-  }
+  // public double getLeftEncoderInches() {
+  //   return frontLeft.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
+  //   //wheel diameter: 6 in
+  // }
   
-	public double getRightEncoderInches() {
-    return frontRight.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
-    //wheel diameter: 6 in
-  }
+	// public double getRightEncoderInches() {
+  //   return frontRight.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
+  //   //wheel diameter: 6 in
+  // }
   
-	public void resetEncoders() {
-    frontLeft.setSelectedSensorPosition(0);
-    frontRight.setSelectedSensorPosition(0);
-  }
+	// public void resetEncoders() {
+  //   frontLeft.setSelectedSensorPosition(0);
+  //   frontRight.setSelectedSensorPosition(0);
+  // }
 
   public float getHeading() {
       // put it behind a method for now because we're not sure if we're using yaw, if the
@@ -120,17 +109,11 @@ public class Drivetrain extends SubsystemBase {
       // return ahrs.getYaw();
       return 0;
   }
-
-  public void resetGyro() {
-    ahrs.reset(); // not sure what this does
-  }
     
   public void outputToSmartDashboard() {
-    SmartDashboard.putNumber("Left Encoder Distance (IN)", -getLeftEncoderInches());
-    SmartDashboard.putNumber("Left Encoder Raw", -frontLeft.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Right Encoder Distance (IN)", -getRightEncoderInches());
-    SmartDashboard.putNumber("Right Encoder Raw", -frontRight.getSelectedSensorPosition());
-    // SmartDashboard.putNumber("IMU_CompassHeading", ahrs.getCompassHeading());
-    // SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
+    // SmartDashboard.putNumber("Left Encoder Distance (IN)", -getLeftEncoderInches());
+    // SmartDashboard.putNumber("Left Encoder Raw", -frontLeft.getSelectedSensorPosition());
+    // SmartDashboard.putNumber("Right Encoder Distance (IN)", -getRightEncoderInches());
+    // SmartDashboard.putNumber("Right Encoder Raw", -frontRight.getSelectedSensorPosition());
   }
 }

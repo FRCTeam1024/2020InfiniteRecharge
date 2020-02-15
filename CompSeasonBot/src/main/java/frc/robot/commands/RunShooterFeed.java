@@ -27,7 +27,7 @@ public class RunShooterFeed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ballFeed.runShooterFeedMotor(0.25);
+    ballFeed.runShooterFeedMotor(0.30);
   }
 
   // Called once the command ends or is interrupted.

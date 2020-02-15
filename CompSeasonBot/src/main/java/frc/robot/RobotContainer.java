@@ -76,6 +76,7 @@ public class RobotContainer {
     SmartDashboard.putData("Retract Intake", new RetractIntake(intake));
     SmartDashboard.putData("Run BallFeed", new RunBallFeed(ballFeed));
     SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(ballFeed));
+    SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
 
   }
 
