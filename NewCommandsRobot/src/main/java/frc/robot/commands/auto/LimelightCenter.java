@@ -19,9 +19,20 @@ public class LimelightCenter extends CommandBase {
   private final Drivetrain drivetrain;
 
   NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry xOffset = limelight.getEntry("tx");
+  NetworkTableEntry xOffsetEntry = limelight.getEntry("tx");
   NetworkTableEntry yOffset = limelight.getEntry("ty");
   NetworkTableEntry targetArea = limelight.getEntry("ta");
+
+  double minimumSpeed = 0.25;
+  double tolerance =  1.5;
+  double baseSpeed = 0.30;
+
+  double drivetrainSpeed;
+
+  double xOffset;
+
+  boolean onTarget = false;
+  int onTargetCount = 0;
   
   /**
    * Creates a new LimelightCenter.
@@ -35,29 +46,37 @@ public class LimelightCenter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // SmartDashboard.putNumber("Minimum Speed", minimumSpeed);
+    // SmartDashboard.putNumber("Base Speed", baseSpeed);
+    xOffset = xOffsetEntry.getDouble(0.0);
+    minimumSpeed =  0.18;
+    tolerance = 1.5;
+    onTarget = false;
+    onTargetCount = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    final double minimumSpeed = SmartDashboard.getNumber("Minimum Speed", 0.20);
     
-    double drivetrainSpeed = .5; 
-    //Gets centering tolerance from SmartDashboard
-    double tolerance = SmartDashboard.getNumber("Tolerance", 1.5);
+    xOffset = xOffsetEntry.getDouble(0.0);
+    // xOffset will be above 1, which would set our speed to 100% power, so need to divide to make it proportional
+    drivetrainSpeed = baseSpeed + ( Math.abs(xOffset) / 100 ); 
     
-    //Slows the robot when gets close to target
-    if(Math.abs(xOffset.getDouble(0.0)) < 7.5){
-      drivetrainSpeed = 0.225;
+    //Slow down when close to target
+    if(Math.abs(xOffset) < 5) {
+      drivetrainSpeed = minimumSpeed + 0.05;
     }
 
-    if(Math.abs( xOffset.getDouble(0.0) ) < tolerance ) {
-      if(Math.abs( xOffset.getDouble(0.0) ) > 0.5) {
+    if(Math.abs( xOffset ) < tolerance ) {
+      if(Math.abs( xOffset ) > 0.5) {
         // slow even more when very close, between 1.5 and 0.5
         drivetrainSpeed = minimumSpeed;
+        onTargetCount++;
       } else {
         // within 0.5 so stop/coast
         drivetrain.drive(0.0, 0.0);
+        onTargetCount++;
       } 
     }
 
@@ -67,17 +86,20 @@ public class LimelightCenter extends CommandBase {
     }
     
     SmartDashboard.putNumber("Speed", drivetrainSpeed);
-    SmartDashboard.putNumber("X Offset", xOffset.getDouble(0.0));
+    SmartDashboard.putNumber("X Offset", xOffset);
     //Checks offsets of center of target and moves robot to center 
 
-    if(xOffset.getDouble(0.0) > tolerance) {
-        // Turn right
+    if(xOffset > 0) {
+      // Turn right
       drivetrain.drive(drivetrainSpeed, -drivetrainSpeed);
-    } else if(xOffset.getDouble(0.0) < -tolerance) {
-        // Turn left
-        drivetrain.drive(-drivetrainSpeed, drivetrainSpeed);
+    } else if(xOffset < 0) {
+      // Turn left
+      drivetrain.drive(-drivetrainSpeed, drivetrainSpeed);
     } 
     
+    if(onTargetCount > 25) {
+      onTarget = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -88,6 +110,7 @@ public class LimelightCenter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    // return Math.abs(xOffset) < 0.5 && (drivetrainSpeed == minimumSpeed);
+    return onTarget;
   }
 }
