@@ -10,9 +10,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PIDDrivetrain;
 
 public class LimelightCenterPID extends CommandBase {

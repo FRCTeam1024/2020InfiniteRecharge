@@ -67,7 +67,6 @@ public class LimelightCenterLoggable extends CommandBase implements Loggable {
   @Override
   public void initialize() {
     xOffset = xOffsetEntry.getDouble(0.0);
-    // drivetrain.setBrakeMode();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -77,7 +76,6 @@ public class LimelightCenterLoggable extends CommandBase implements Loggable {
     xOffset = xOffsetEntry.getDouble(0.0);
     // xOffset will be above 1, which would set our speed to 100% power, so need to divide to make it proportional
     drivetrainSpeed = baseSpeed + ( Math.abs(xOffset) / 100 ); 
-    //Gets centering tolerance from SmartDashboard
     
     //Slows the robot when gets close to target
     if(Math.abs(xOffset) < 7.5) {

@@ -23,6 +23,7 @@ import frc.robot.commands.TurnToAnglePID;
 import frc.robot.commands.auto.LimelightCenter;
 import frc.robot.commands.auto.LimelightCenterLoggable;
 import frc.robot.commands.auto.LimelightCenterPID;
+import frc.robot.commands.auto.LimelightCenterSequential;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.PIDDrivetrain;
 import frc.robot.subsystems.Sensors;
@@ -53,10 +54,10 @@ public class RobotContainer {
 
   public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
 
-  private final Command m_autoCommand = new LimelightCenter(drivetrain);
+  private final Command m_autoCommand = new LimelightCenterSequential(drivetrain);
   // private final Command limelightCenterPID = new LimelightCenterPID(drivetrainPID);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
-  
+
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
