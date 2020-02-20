@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
    */
   public Shooter() {
     shooterOne = new CANSparkMax(39, MotorType.kBrushless);
-    shooterTwo = new CANSparkMax(37, MotorType.kBrushless);
+    shooterTwo = new CANSparkMax(47, MotorType.kBrushless);
     shooterEncoderOne = shooterOne.getEncoder();
     shooterEncoderTwo = shooterTwo.getEncoder();
   }
@@ -33,6 +33,13 @@ public class Shooter extends SubsystemBase {
     shooterTwo.set(motorTwoSpeed);
   }
   
+  public void runShooterOne(double motorOneSpeed){
+    shooterOne.set(motorOneSpeed);
+  }
+  
+  public void runShooterTwo(double motorTwoSpeed){
+    shooterTwo.set(motorTwoSpeed);
+  }
   public void stopShooterMotors(){
     shooterOne.set(0.0);
     shooterTwo.set(0.0);

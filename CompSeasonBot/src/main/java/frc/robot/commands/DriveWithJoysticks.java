@@ -25,8 +25,8 @@ public class DriveWithJoysticks extends CommandBase {
     this.leftJoystick = leftJoystick;
     this.rightJoystick = rightJoystick;
     
-    rightJoystick = new Joystick(2);
-    leftJoystick = new Joystick(0);
+    rightJoystick = new Joystick(0);
+    leftJoystick = new Joystick(2);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }

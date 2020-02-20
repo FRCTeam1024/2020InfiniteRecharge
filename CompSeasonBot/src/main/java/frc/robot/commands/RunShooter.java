@@ -13,9 +13,14 @@ public class RunShooter extends CommandBase {
   /**
    * Creates a new RunShooter.
    */
+  double motorSpeedRight;
+  double motorSpeedLeft;
   Shooter shooter;
-  public RunShooter(Shooter shooter) {
+  public RunShooter(Shooter shooter, double motorSpeedLeft, double motorSpeedRight) {
     this.shooter = shooter;
+    this.motorSpeedLeft = motorSpeedLeft;
+    this.motorSpeedRight = motorSpeedRight;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -28,7 +33,7 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.runShooterMotors(0.25, 0.25);
+    shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
   }
 
   // Called once the command ends or is interrupted.

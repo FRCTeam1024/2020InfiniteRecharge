@@ -14,8 +14,12 @@ public class RunClimber extends CommandBase {
    * Creates a new RunClimber.
    */
   Climber climber;
-  public RunClimber(Climber climber) {
+  double motorSpeedOne;
+  double motorSpeedTwo;
+  public RunClimber(Climber climber, double motorSpeedOne, double motorSpeedTwo) {
     this.climber = climber;
+    this.motorSpeedOne = motorSpeedOne;    
+    this.motorSpeedTwo = motorSpeedTwo;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
   }
@@ -28,13 +32,13 @@ public class RunClimber extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveClimber(0.25);
+    climber.moveClimber(motorSpeedOne, motorSpeedTwo);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.stopClimber();
+    climber.climberMotorLeft.set(0.0);
   }
 
   // Returns true when the command should end.

@@ -16,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
   
   
-  public final WPI_TalonSRX climberMotorOne = new WPI_TalonSRX(7);
-  public final WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(14);
+  public final WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(7);
+  public final WPI_TalonSRX climberMotorRight = new WPI_TalonSRX(14);
   /**
    * Creates a new Climber.
    */
@@ -25,13 +25,13 @@ public class Climber extends SubsystemBase {
     
   }
   
-  public void moveClimber(double motorSpeed){
-    climberMotorOne.set(ControlMode.PercentOutput, motorSpeed);
-    climberMotorLeft.set(ControlMode.PercentOutput, motorSpeed);
+  public void moveClimber(double motorSpeedOne, double motorSpeedTwo){
+    climberMotorLeft.set(ControlMode.PercentOutput, motorSpeedOne);
+    climberMotorRight.set(ControlMode.PercentOutput, motorSpeedTwo);
   }  
   public void stopClimber(){
-    climberMotorOne.set(ControlMode.PercentOutput, 0.0);
     climberMotorLeft.set(ControlMode.PercentOutput, 0.0);
+    climberMotorRight.set(ControlMode.PercentOutput, 0.0);
   }
   @Override
   public void periodic() {

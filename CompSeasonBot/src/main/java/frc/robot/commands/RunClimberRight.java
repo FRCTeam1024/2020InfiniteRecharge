@@ -9,17 +9,18 @@ package frc.robot.commands;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RunBallFeed extends CommandBase {
+public class RunClimberRight extends CommandBase {
   /**
-   * Creates a new RunBallFeed.
+   * Creates a new RunClimber.
    */
-  double motorSpeed;
-  BallFeed ballFeed;
-  public RunBallFeed(BallFeed ballFeed, double motorSpeed) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.ballFeed = ballFeed;
-    this.motorSpeed = motorSpeed;    
+  Climber climber;
+  double motorSpeedTwo;
+  public RunClimberRight(Climber climber, double motorSpeedTwo) {
+    this.climber = climber;  
+    this.motorSpeedTwo = motorSpeedTwo;    
 
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +31,13 @@ public class RunBallFeed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ballFeed.runBallFeedMotor(motorSpeed);
+    climber.climberMotorRight.set(motorSpeedTwo);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ballFeed.stopBallFeedMotor();
+    climber.climberMotorRight.set(0.0);
   }
 
   // Returns true when the command should end.
