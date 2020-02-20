@@ -53,6 +53,7 @@ public class RobotContainer {
   public Joystick rightJoystick = new Joystick(0);
 
   public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
+  public JoystickButton runShooter = new JoystickButton(leftJoystick, 3);
 
   private final Command m_autoCommand = new LimelightCenterSequential(drivetrain);
   // private final Command limelightCenterPID = new LimelightCenterPID(drivetrainPID);
