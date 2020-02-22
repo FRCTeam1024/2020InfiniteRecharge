@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -39,9 +38,9 @@ public class RobotContainer {
   private final BallFeed ballFeed  = new BallFeed();
 
 
-  public Joystick leftJoystick = new Joystick(2);
-  public Joystick rightJoystick = new Joystick(0);
-  public XboxController xboxController = new XboxController(1);
+  public Joystick leftJoystick = new Joystick(0);
+  public Joystick rightJoystick = new Joystick(1);
+  public XboxController xboxController = new XboxController(2);
   
   public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
   public JoystickButton runShooter = new JoystickButton(leftJoystick, 7);
@@ -78,9 +77,9 @@ public class RobotContainer {
     
     // autoCenter.whileHeld(m_autoCommand);
     
-    NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry xOffset = limelight.getEntry("tx");
-    runShooter.whenActive(new RunShooter(shooter, 0.25, 0.25));
+    // NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
+    // NetworkTableEntry xOffset = limelight.getEntry("tx");
+    runShooter.whenActive(new RunShooter(shooter, 1.0));
     scorePowerCell.whenActive(new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
     runIntake.whenActive(new RunIntake(intake, 0.25));
 
@@ -94,12 +93,11 @@ public class RobotContainer {
     //runShooterAndBallFeed.whenActive(new RunShooterFeed(ballFeed, 0.25), new RunBallFeed(ballFeed, 0.25));
     SmartDashboard.putData(drivetrain);
     SmartDashboard.putData("Run Intake", new RunIntake(intake, 0.25));
-    SmartDashboard.putData("Run Shooter", new RunShooter(shooter, 1.0 , -1.0));
 
-    
-    SmartDashboard.putData("Run Shooter One", new RunShooterOne(shooter, 1.0));
-    
-    SmartDashboard.putData("Run Shooter Two", new RunShooterTwo(shooter, -1.0));
+    SmartDashboard.putData("Run Shooter", new RunShooter(shooter, 1.0));
+    // SmartDashboard.putData("Run Shooter One", new RunShooterOne(shooter, 1.0));    
+    // SmartDashboard.putData("Run Shooter Two", new RunShooterTwo(shooter, -1.0));
+
     SmartDashboard.putData("Run Climber One", new RunClimberLeft(climber, 0.35));
     SmartDashboard.putData("Stop Climber", new StopClimber(climber));
 
@@ -114,6 +112,7 @@ public class RobotContainer {
     SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(ballFeed, 1.0));
     SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
 
+    Shuffleboard.getTab("Shooter").add("Run Shooter PID", new RunShooterPID(shooter));
   }
 
 

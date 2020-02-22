@@ -10,16 +10,14 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RunShooter extends CommandBase {
-  /**
-   * Creates a new RunShooter.
-   */
-  double motorSpeedRight;
-  double motorSpeedLeft;
+  
   Shooter shooter;
-  public RunShooter(Shooter shooter, double motorSpeedLeft, double motorSpeedRight) {
+  double motorSpeeds;
+
+  // used when they're in leader/follower mode
+  public RunShooter(Shooter shooter, double motorSpeeds) {
     this.shooter = shooter;
-    this.motorSpeedLeft = motorSpeedLeft;
-    this.motorSpeedRight = motorSpeedRight;
+    this.motorSpeeds = motorSpeeds;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -33,7 +31,8 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
+    // shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
+    shooter.runShooterMotors(motorSpeeds);
   }
 
   // Called once the command ends or is interrupted.
