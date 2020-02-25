@@ -12,10 +12,12 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.robot.Logitech.DPAD;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.LimelightCenter;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,18 +43,31 @@ public class RobotContainer {
 
   public Joystick leftJoystick = new Joystick(2);
   public Joystick rightJoystick = new Joystick(0);
-  public XboxController xboxController = new XboxController(1);
+  //public XboxController xboxController = new XboxController(1);
+  public Logitech logi = new Logitech(1);
   
-  public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
-  public JoystickButton runShooter = new JoystickButton(leftJoystick, 7);
-  public JoystickButton scorePowerCell = new JoystickButton(leftJoystick, 8);
-  public JoystickButton runIntake = new JoystickButton(leftJoystick, 9);
-  public JoystickButton runShooterAndBallFeed = new JoystickButton(leftJoystick, 6);
+ // public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
+ // public JoystickButton runShooter = new JoystickButton(leftJoystick, 7);
+ // public JoystickButton scorePowerCell = new JoystickButton(leftJoystick, 8);
+  public JoystickButton runIntake = new JoystickButton(logi, 7);
+  public JoystickButton runIntakeOut = new JoystickButton(logi, 5);
+ // public JoystickButton extendIntake = new JoystickButton(logi, 0);
+ // public JoystickButton retractIntake = new JoystickButton(logi, 180);
 
-  public JoystickButton runRightClimberButtonDown = new JoystickButton(xboxController, XboxController.Button.kA.value);
-  public JoystickButton runRightClimberButtonUp = new JoystickButton(xboxController, XboxController.Button.kB.value);
-  public JoystickButton runLeftClimberButtonDown = new JoystickButton(xboxController, XboxController.Button.kX.value);
-  public JoystickButton runLeftClimberButtonUp = new JoystickButton(xboxController, XboxController.Button.kY.value);
+  public JoystickButton runShooter = new JoystickButton(logi, 6);
+  public JoystickButton runShooterDPADTEMPORARY = new JoystickButton(logi, 0);
+
+  //public JoystickButton runBallFeed = new JoystickButton(logi, XboxController.Button.kBumperLeft.value);
+  public JoystickButton runShooterFeed = new JoystickButton(logi, 8);
+  public JoystickButton runShooterFeedDPADTEMPORARY = new JoystickButton(logi, 180);
+
+
+
+
+//  public JoystickButton runRightClimberButtonDown = new JoystickButton(xboxController, XboxController.Button.kA.value);
+ // public JoystickButton runRightClimberButtonUp = new JoystickButton(xboxController, XboxController.Button.kB.value);
+//  public JoystickButton runLeftClimberButtonDown = new JoystickButton(xboxController, XboxController.Button.kX.value);
+  //public JoystickButton runLeftClimberButtonUp = new JoystickButton(xboxController, XboxController.Button.kY.value);
 
 
   private final Command m_autoCommand = new LimelightCenter(drivetrain);
@@ -80,20 +95,37 @@ public class RobotContainer {
     
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry xOffset = limelight.getEntry("tx");
-    runShooter.whenActive(new RunShooter(shooter, 0.25, 0.25));
-    scorePowerCell.whenActive(new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
-    runIntake.whenActive(new RunIntake(intake, 0.25));
+    runShooter.toggleWhenActive(new RunShooter(shooter, 1.0, -1.0));
+    runShooterDPADTEMPORARY.whileHeld(new RunShooter(shooter, 1.0, -1.0));
+    runShooterFeedDPADTEMPORARY.whileHeld(new RunShooterFeed(ballFeed, 1.0));
+    runShooterFeed.whileHeld(new RunShooterFeed(ballFeed, 1.0));
+    //extendIntake.whenPressed(new ExtendIntake(intake));
+  //  retractIntake.whenPressed(new RetractIntake(intake));
 
-    runRightClimberButtonUp.whileHeld(new RunClimberRight(climber, 0.25));
-    runRightClimberButtonDown.whileHeld(new RunClimberRight(climber, -0.25));
-    runLeftClimberButtonUp.whileHeld(new RunClimberLeft(climber, 0.25));
-    runLeftClimberButtonDown.whileHeld(new RunClimberLeft(climber, -0.25));
+  //  runBallFeed.whileHeld(new RunBallFeed(ballFeed, -1.0));
+  //  runShooterFeed.whileHeld(new RunShooterFeed(ballFeed, 1.0));
 
+  //  scorePowerCell.whenActive(new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
+    runIntake.whileHeld(new RunIntake(intake, 1.0));
+    runIntakeOut.whileHeld(new RunIntake(intake, -1.0));
+
+
+  //  runRightClimberButtonUp.whileHeld(new RunClimberRight(climber, 0.25));
+ //   runRightClimberButtonDown.whileHeld(new RunClimberRight(climber, -0.25));
+   // runLeftClimberButtonUp.whileHeld(new RunClimberLeft(climber, 0.25));
+ //   runLeftClimberButtonDown.whileHeld(new RunClimberLeft(climber, -0.25));
+
+    SmartDashboard.putData("Extend Intake", new PneumaticIntake(intake, true));
+    SmartDashboard.putData("Retract Intake", new PneumaticIntake(intake, false));
+    // SmartDashboard.putNumber("Shooter Encoder One Value", shooter.getShooterOneEncoderValue());
+    // SmartDashboard.putNumber("Shooter Encoder Two Value", shooter.getShooterTwoEncoderValue());
+    // SmartDashboard.putNumber("Shooter Encoder One Velocity", shooter.getShooterOneEncoderVelocity());
+    // SmartDashboard.putNumber("Shooter Encoder Two Velocity", shooter.getShooterTwoEncoderVelocity());
 
     SmartDashboard.putData("Score Power Cell", new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
     //runShooterAndBallFeed.whenActive(new RunShooterFeed(ballFeed, 0.25), new RunBallFeed(ballFeed, 0.25));
     SmartDashboard.putData(drivetrain);
-    SmartDashboard.putData("Run Intake", new RunIntake(intake, 0.25));
+    SmartDashboard.putData("Run Intake", new RunIntake(intake, 1.0));
     SmartDashboard.putData("Run Shooter", new RunShooter(shooter, 1.0 , -1.0));
 
     
@@ -102,7 +134,7 @@ public class RobotContainer {
     SmartDashboard.putData("Run Shooter Two", new RunShooterTwo(shooter, -1.0));
     SmartDashboard.putData("Run Climber One", new RunClimberLeft(climber, 0.35));
     SmartDashboard.putData("Stop Climber", new StopClimber(climber));
-
+    SmartDashboard.putData("Reset Shooter Encoders", new ResetShooterEncoders(shooter));
     SmartDashboard.putData("Run Climber Two", new RunClimberRight(climber, -0.35));
     SmartDashboard.putData("Run Climber", new RunClimber(climber, -0.35, 0.35));
     Shuffleboard.getTab("Climber").add("Run Climber", new RunClimber(climber, 0.35, -0.35));
@@ -130,11 +162,20 @@ public class RobotContainer {
 
   public void periodic() {
     outputToSmartDashboard();
+    System.out.print(shooter.getShooterOneEncoderValue());
+    System.out.print(shooter.getShooterTwoEncoderValue());
+    System.out.print(shooter.getShooterOneEncoderVelocity());
+    System.out.print(shooter.getShooterTwoEncoderVelocity());
+
   }
 
   public void outputToSmartDashboard() {
     SmartDashboard.putNumber("Yaw", sensors.getHeading());
     SmartDashboard.putData("Reset Gyro", new InstantCommand(sensors::resetGyro));
+    SmartDashboard.putNumber("Shooter Encoder One Value", shooter.getShooterOneEncoderValue());
+    SmartDashboard.putNumber("Shooter Encoder Two Value", shooter.getShooterTwoEncoderValue());
+    SmartDashboard.putNumber("Shooter Encoder One Velocity", shooter.getShooterOneEncoderVelocity());
+    SmartDashboard.putNumber("Shooter Encoder Two Velocity", shooter.getShooterTwoEncoderVelocity());
     
   }
 }

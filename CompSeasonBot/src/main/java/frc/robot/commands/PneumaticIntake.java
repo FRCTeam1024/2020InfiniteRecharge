@@ -6,23 +6,20 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-public class RunShooter extends CommandBase {
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+public class PneumaticIntake extends CommandBase {
   /**
-   * Creates a new RunShooter.
+   * Creates a new PneumaticIntake.
    */
-  double motorSpeedRight;
-  double motorSpeedLeft;
-  Shooter shooter;
-  public RunShooter(Shooter shooter, double motorSpeedLeft, double motorSpeedRight) {
-    this.shooter = shooter;
-    this.motorSpeedLeft = motorSpeedLeft;
-    this.motorSpeedRight = motorSpeedRight;
-
+  Intake intake;
+  Boolean extend;
+  public PneumaticIntake(Intake intake, Boolean extend) {
+    this.intake = intake;
+    this.extend = extend;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -33,15 +30,18 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
-    // System.out.print(shooter.getShooterOneEncoderVelocity());
-    System.out.println(shooter.getShooterTwoEncoderVelocity());
+    if(extend = true){
+      intake.extendIntake();
+    }
+    else if(extend = false){
+      intake.retractIntake();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooterMotors();
+    
   }
 
   // Returns true when the command should end.
