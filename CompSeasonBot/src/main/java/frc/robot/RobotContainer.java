@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.LimelightCenter;
+import frc.robot.oi.Logitech;
 import frc.robot.oi.MustangController;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -42,7 +43,7 @@ public class RobotContainer {
 
   public Joystick leftJoystick = new Joystick(0);
   public Joystick rightJoystick = new Joystick(1);
-  public MustangController xboxController = new MustangController(2);
+  public Logitech xboxController = new Logitech(2);
 
   
   public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
@@ -67,11 +68,10 @@ public class RobotContainer {
   public JoystickButton runShooterFeedWheel = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
   
   // public JoystickButton intakeIn = new JoystickButton(xboxController, xboxController.getDPadState());
-  public Trigger intakeUp = new Trigger( () -> xboxController.getDPadState().equals(MustangController.DPadState.UP));
-  public Trigger intakeDown = new Trigger( () -> xboxController.getDPadState().equals(MustangController.DPadState.DOWN));
+  public Trigger intakeUp = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.UP));
+  public Trigger intakeDown = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.DOWN));
 
-  public Trigger shooterTrigger = new Trigger( () -> xboxController.getLeftTriggerAxis() > 0.50 );
-
+  public JoystickButton leftTrigger = new JoystickButton(xboxController, 7);
 
   private final Command m_autoCommand = new LimelightCenter(drivetrain);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
@@ -118,7 +118,9 @@ public class RobotContainer {
     // intakeDown.whenActive(new ExtendIntake(intake));
     intakeDown.toggleWhenActive(new RunShooterFeed(ballFeed, 1.0)); // just testing whether dpad works
 
-    shooterTrigger.whileActiveContinuous(new RunShooterFeed(ballFeed, 1.0)); // just testing trigger
+   // shooterFeedTrigger.whileActiveContinuous(new RunShooterFeed(ballFeed, 1.0)); // just testing trigger
+
+    leftTrigger.whileHeld(new RunShooterFeed(ballFeed, 1.0));
 
     SmartDashboard.putData("Score Power Cell", new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
     //runShooterAndBallFeed.whenActive(new RunShooterFeed(ballFeed, 0.25), new RunBallFeed(ballFeed, 0.25));
@@ -165,6 +167,5 @@ public class RobotContainer {
   public void outputToSmartDashboard() {
     SmartDashboard.putNumber("Yaw", sensors.getHeading());
     SmartDashboard.putData("Reset Gyro", new InstantCommand(sensors::resetGyro));
-    
   }
 }

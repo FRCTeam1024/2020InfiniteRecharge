@@ -13,6 +13,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.RunShooter;
 import frc.robot.commands.RunShooterPID;
@@ -58,7 +59,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void runShooterMotors(double motorSpeeds) {
-    shooterTwo.set(motorSpeeds);
+    shooterOne.set(motorSpeeds);
   }
 
   public void runShooterMotors(double motorOneSpeed, double motorTwoSpeed){
@@ -89,6 +90,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    SmartDashboard.putNumber("Velocity", shooterEncoderOne.getVelocity());
   }
 }

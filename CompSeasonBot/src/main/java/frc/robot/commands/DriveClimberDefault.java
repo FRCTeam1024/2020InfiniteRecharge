@@ -7,18 +7,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.oi.Logitech;
 import frc.robot.oi.MustangController;
 import frc.robot.subsystems.Climber;
 
 public class DriveClimberDefault extends CommandBase {
 
-  MustangController controller;
+  Logitech controller;
   Climber climber;
   /**
    * Creates a new DriveClimberDefault.
    */
-  public DriveClimberDefault(Climber climber, MustangController controller) {
+  public DriveClimberDefault(Climber climber, Logitech controller) {
     this.climber = climber;
     this.controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,7 +35,11 @@ public class DriveClimberDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveClimber(controller.getLeftStickY(), controller.getRightStickY());
+    SmartDashboard.putNumber("left stick Y", controller.getLeftStickY());
+    SmartDashboard.putNumber("right stick Y", controller.getRightStickY());
+    
+    // invert the right side? it was only running one way
+    climber.moveClimber(controller.getLeftStickY(), -controller.getRightStickY());
   }
 
   // Called once the command ends or is interrupted.
