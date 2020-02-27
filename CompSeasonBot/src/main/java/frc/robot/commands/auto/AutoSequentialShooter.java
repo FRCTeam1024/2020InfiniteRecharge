@@ -5,24 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.groups;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.RunBallFeed;
-import frc.robot.commands.RunShooter;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import frc.robot.commands.groups.RunShooterAndBallFeed;
 import frc.robot.subsystems.BallFeed;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterFeed;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class RunShooterAndBallFeed extends ParallelCommandGroup {
+// make it a RaceGroup so it will end when the SequentialShooter ends, 
+// which it should do after shooting 3 balls
+// the RunShooterAndBallFeed does not currently have an end condition
+public class AutoSequentialShooter extends ParallelRaceGroup {
   /**
-   * Creates a new RunShooterAndBallFeed.
+   * Creates a new AutoSequentialShooter.
    */
-  public RunShooterAndBallFeed(Shooter shooter, BallFeed ballFeed) {
+  public AutoSequentialShooter(Shooter shooter, BallFeed ballFeed, ShooterFeed shooterFeed) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    super(new RunBallFeed(ballFeed, 0.5), new RunShooter(shooter, 1.0));
+    super(new RunShooterAndBallFeed(shooter, ballFeed), new SequentialShooter(shooter, shooterFeed));
   }
 }

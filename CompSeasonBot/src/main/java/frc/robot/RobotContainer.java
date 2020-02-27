@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.AutoSequentialShooter;
 import frc.robot.commands.auto.LimelightCenter;
+import frc.robot.commands.groups.RunShooterAndBallFeed;
 import frc.robot.oi.Logitech;
 import frc.robot.oi.MustangController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +41,7 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Climber climber  = new Climber();
   private final BallFeed ballFeed  = new BallFeed();
+  private final ShooterFeed shooterFeed  = new ShooterFeed();
 
 
   public Joystick leftJoystick = new Joystick(0);
@@ -82,7 +85,8 @@ public class RobotContainer {
 
   //public JoystickButton leftTrigger = new JoystickButton(xboxController, 7);
 
-  private final Command m_autoCommand = new LimelightCenter(drivetrain);
+  // private final Command m_autoCommand = new LimelightCenter(drivetrain);
+  private final Command m_autoCommand = new AutoSequentialShooter(shooter, ballFeed, shooterFeed);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
   private final DriveClimberDefault driveClimberDefault = new DriveClimberDefault(climber, xboxController);
 
@@ -128,7 +132,7 @@ public class RobotContainer {
     intakeRetract.toggleWhenActive(new RetractIntake(intake));
 
     runShooterWheel.toggleWhenPressed(new RunShooter(shooter, 1.0));
-    runShooterFeedWheel.whileHeld(new RunShooterFeed(ballFeed, 1.0));
+    runShooterFeedWheel.whileHeld(new RunShooterFeed(shooterFeed, 1.0));
 
     ballFeedIn.whileHeld(new RunBallFeed(ballFeed, -1.0));
     ballFeedOut.whileHeld(new RunBallFeed(ballFeed, 1.0));
@@ -142,7 +146,7 @@ public class RobotContainer {
 
     //leftTrigger.whileHeld(new RunShooterFeed(ballFeed, 1.0));
 
-    SmartDashboard.putData("Score Power Cell", new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
+    SmartDashboard.putData("Score Power Cell", new ShootPowerCell(shooterFeed, ballFeed, shooter));
     //runShooterAndBallFeed.whenActive(new RunShooterFeed(ballFeed, 0.25), new RunBallFeed(ballFeed, 0.25));
     SmartDashboard.putData(drivetrain);
     SmartDashboard.putData("Run Intake", new RunIntake(intake, 0.25));
@@ -158,11 +162,12 @@ public class RobotContainer {
     SmartDashboard.putData("Run Climber", new RunClimber(climber, -0.35, 0.35));
     Shuffleboard.getTab("Climber").add("Run Climber", new RunClimber(climber, 0.35, -0.35));
 
+    SmartDashboard.putData("Run Shooter And BallFeed", new RunShooterAndBallFeed(shooter, ballFeed));
 
     SmartDashboard.putData("Extend Intake", new ExtendIntake(intake));
     SmartDashboard.putData("Retract Intake", new RetractIntake(intake));
     SmartDashboard.putData("Run BallFeed", new RunBallFeed(ballFeed, -0.50));
-    SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(ballFeed, 1.0));
+    SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(shooterFeed, 1.0));
     SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
 
     Shuffleboard.getTab("Shooter").add("Run Shooter PID", new RunShooterPID(shooter));
