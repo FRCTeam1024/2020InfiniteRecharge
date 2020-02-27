@@ -5,21 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+package frc.robot.commands.groups;
+
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.subsystems.BallFeed;
+import frc.robot.subsystems.Shooter;
 
-public class ShootPowerCell extends ParallelCommandGroup {
+// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
+// information, see:
+// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
+public class RunShooterAndBallFeed extends ParallelCommandGroup {
   /**
-   * Creates a new ShootPowerCell.
+   * Creates a new RunShooterAndBallFeed.
    */
-  
-
-  public ShootPowerCell(ShooterFeed shooterFeed, BallFeed ballFeed, Shooter shooter) {
-    super(new RunShooterFeed(shooterFeed, 1.0), new RunBallFeed(ballFeed, -0.50), new RunShooter(shooter, 1.0));
+  public RunShooterAndBallFeed(Shooter shooter, BallFeed ballFeed) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    
   }
 }

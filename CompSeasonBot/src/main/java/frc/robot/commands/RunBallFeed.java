@@ -20,6 +20,7 @@ public class RunBallFeed extends CommandBase {
     this.ballFeed = ballFeed;
     this.motorSpeed = motorSpeed;    
 
+    addRequirements(ballFeed);
   }
 
   // Called when the command is initially scheduled.

@@ -13,13 +13,14 @@ public class RunShooterFeed extends CommandBase {
   /**
    * Creates a new RunShooterFeed.
    */
-  BallFeed ballFeed;
+  ShooterFeed shooterFeed;
   double motorSpeed;
-  public RunShooterFeed(BallFeed ballFeed, double motorSpeed) {
-    this.ballFeed = ballFeed;
+  public RunShooterFeed(ShooterFeed shooterFeed, double motorSpeed) {
+    this.shooterFeed = shooterFeed;
     this.motorSpeed = motorSpeed;
 
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooterFeed);
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +31,13 @@ public class RunShooterFeed extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ballFeed.runShooterFeedMotor(motorSpeed);
+    shooterFeed.runShooterFeedMotor(motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ballFeed.stopShooterFeedMotor();
+    shooterFeed.stopShooterFeedMotor();
   }
 
   // Returns true when the command should end.
