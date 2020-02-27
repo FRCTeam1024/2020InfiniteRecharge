@@ -17,8 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.commands.auto.LimelightCenter;
+import frc.robot.oi.CONSTANTS_OI;
 import frc.robot.oi.Logitech;
-import frc.robot.oi.MustangController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -46,41 +46,29 @@ public class RobotContainer {
   public Logitech xboxController = new Logitech(2);
 
   
- // public JoystickButton autoCenter = new JoystickButton(leftJoystick, 2);
- // public JoystickButton runShooter = new JoystickButton(leftJoystick, 7);
- // public JoystickButton scorePowerCell = new JoystickButton(leftJoystick, 8);
- // public JoystickButton runIntake = new JoystickButton(leftJoystick, 9);
  // public JoystickButton runShooterAndBallFeed = new JoystickButton(leftJoystick, 6);
 
-  // JoystickButton leftTriggerButton = new JoystickButton(xboxController, (xboxController) -> xboxController.getTriggerAxis(Hand.kLeft) >= 0.5);
-
-//  public JoystickButton runLeftClimberButtonDown = new JoystickButton(xboxController, XboxController.Button.kX.value);
-//  public JoystickButton runLeftClimberButtonUp = new JoystickButton(xboxController, XboxController.Button.kY.value);
   
   // below this done with Marc
-  public JoystickButton runIntakeIn = new JoystickButton(xboxController, 7);
-  public JoystickButton runIntakeOut = new JoystickButton(xboxController, XboxController.Button.kBumperLeft.value);
+  public JoystickButton xboxLeftTrigger = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_LEFT_TRIGGER);
+  public JoystickButton xboxLeftBumper = new JoystickButton(xboxController, XboxController.Button.kBumperLeft.value);
 
 
-  public JoystickButton runLeftClimberStick = new JoystickButton(xboxController, XboxController.Button.kStickLeft.value);
-  public JoystickButton runRightClimberStick = new JoystickButton(xboxController, XboxController.Button.kStickRight.value);
+  public JoystickButton xboxLeftClimberStick = new JoystickButton(xboxController, XboxController.Button.kStickLeft.value);
+  public JoystickButton xboxRightClimberStick = new JoystickButton(xboxController, XboxController.Button.kStickRight.value);
   
-  public JoystickButton runClimberHookDown = new JoystickButton(xboxController, XboxController.Button.kA.value);
-  public JoystickButton runClimberHookUp = new JoystickButton(xboxController, XboxController.Button.kB.value);
+  public JoystickButton xboxButtonA = new JoystickButton(xboxController, XboxController.Button.kA.value);
+  public JoystickButton xboxButtonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
   
-  public JoystickButton runShooterWheel = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
-  public JoystickButton runShooterFeedWheel = new JoystickButton(xboxController, 8);
+  public JoystickButton xboxRightBumper = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
+  public JoystickButton xboxRightTrigger = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_RIGHT_TRIGGER);
   
-  // public JoystickButton intakeIn = new JoystickButton(xboxController, xboxController.getDPadState());
- // public Trigger intakeUp = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.UP));
- // public Trigger intakeDown = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.DOWN));
-  public Trigger intakeExtend = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.UP));
-  public Trigger intakeRetract = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.DOWN));
+  public Trigger xboxDPadUp = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.UP));
+  public Trigger xboxDPadDown = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.DOWN));
 
-  public JoystickButton ballFeedOut = new JoystickButton(xboxController, 9);
-  public JoystickButton ballFeedIn = new JoystickButton(xboxController, 10);
+  public JoystickButton ballFeedOut = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_BACK_BUTTON);
+  public JoystickButton xboxStartButton = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_START_BUTTON);
 
-  //public JoystickButton leftTrigger = new JoystickButton(xboxController, 7);
 
   private final Command m_autoCommand = new LimelightCenter(drivetrain);
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
@@ -108,48 +96,38 @@ public class RobotContainer {
     
     // NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     // NetworkTableEntry xOffset = limelight.getEntry("tx");
-   // runShooter.whenActive(new RunShooter(shooter, 1.0));
-   // scorePowerCell.whenActive(new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
-  //  runIntake.whenActive(new RunIntake(intake, 0.25));
 
     // below done with Marc
-    runClimberHookUp.whileHeld(new RunClimberHook(climber, 0.50));
-    runClimberHookDown.whileHeld(new RunClimberHook(climber, -0.50));
 
-   // runLeftClimberButtonUp.whileHeld(new RunClimberLeft(climber, 0.25));
-  //  runLeftClimberButtonDown.whileHeld(new RunClimberLeft(climber, -0.25));
-    runLeftClimberStick.whenActive(new RunClimberLeft(climber, xboxController.getRawAxis(1)));
-    runRightClimberStick.whenActive(new RunClimberRight(climber, xboxController.getRawAxis(3)));
+    xboxButtonB.whileHeld(new RunClimberHook(climber, 0.50));
+    xboxButtonA.whileHeld(new RunClimberHook(climber, -0.50));
 
-    runIntakeIn.whileHeld(new RunIntake(intake, 1.0));
-    runIntakeOut.whileHeld(new RunIntake(intake, -1.0));
+    xboxLeftClimberStick.whenActive(new RunClimberLeft(climber, xboxController.getRawAxis(CONSTANTS_OI.XBOX_LEFT_STICK_Y_AXIS)));
+    xboxRightClimberStick.whenActive(new RunClimberRight(climber, xboxController.getRawAxis(CONSTANTS_OI.XBOX_RIGHT_STICK_Y_AXIS)));
 
-    intakeExtend.toggleWhenActive(new ExtendIntake(intake));
-    intakeRetract.toggleWhenActive(new RetractIntake(intake));
+    xboxLeftTrigger.whileHeld(new RunIntake(intake, 1.0));
+    // when intake is done and we want to run it with ball feeder, replace above line with this
+    // runIntakeIn.whileHeld(new ParallelCommandGroup(new RunIntake(intake, 1.0), 
+    //                                               new RunBallFeed(ballFeed, -1.0)));
 
-    runShooterWheel.toggleWhenPressed(new RunShooter(shooter, 1.0));
-    runShooterFeedWheel.whileHeld(new RunShooterFeed(ballFeed, 1.0));
+    xboxLeftBumper.whileHeld(new RunIntake(intake, -1.0));
 
-    ballFeedIn.whileHeld(new RunBallFeed(ballFeed, -1.0));
+    xboxDPadUp.toggleWhenActive(new ExtendIntake(intake));
+    xboxDPadDown.toggleWhenActive(new RetractIntake(intake));
+
+    xboxRightBumper.toggleWhenPressed(new RunShooter(shooter, 1.0));
+    xboxRightTrigger.whileHeld(new RunShooterFeed(ballFeed, 1.0));
+
+    xboxStartButton.whileHeld(new RunBallFeed(ballFeed, -1.0));
     ballFeedOut.whileHeld(new RunBallFeed(ballFeed, 1.0));
 
-    // intakeUp.whenActive(new RetractIntake(intake));
-   // intakeUp.toggleWhenActive(new RunShooterFeed(ballFeed, 1.0));  // just testing whether dpad works
-    // intakeDown.whenActive(new ExtendIntake(intake));
-   // intakeDown.toggleWhenActive(new RunShooterFeed(ballFeed, 1.0)); // just testing whether dpad works
-
-   // shooterFeedTrigger.whileActiveContinuous(new RunShooterFeed(ballFeed, 1.0)); // just testing trigger
-
-    //leftTrigger.whileHeld(new RunShooterFeed(ballFeed, 1.0));
-
+    
     SmartDashboard.putData("Score Power Cell", new ShootPowerCell(intake, ballFeed, drivetrain, shooter));
     //runShooterAndBallFeed.whenActive(new RunShooterFeed(ballFeed, 0.25), new RunBallFeed(ballFeed, 0.25));
     SmartDashboard.putData(drivetrain);
     SmartDashboard.putData("Run Intake", new RunIntake(intake, 0.25));
 
     SmartDashboard.putData("Run Shooter", new RunShooter(shooter, 1.0));
-    // SmartDashboard.putData("Run Shooter One", new RunShooterOne(shooter, 1.0));    
-    // SmartDashboard.putData("Run Shooter Two", new RunShooterTwo(shooter, -1.0));
 
     SmartDashboard.putData("Run Climber One", new RunClimberLeft(climber, 0.35));
     SmartDashboard.putData("Stop Climber", new StopClimber(climber));
