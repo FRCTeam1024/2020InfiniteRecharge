@@ -24,12 +24,14 @@ public class Intake extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
+  private CANEncoder intakeEncoder;
   private CANSparkMax intakeMotor;
 
-  // private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
+   private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
 
   public Intake() {
-    intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(24, MotorType.kBrushless);
+    intakeEncoder = new CANEncoder(intakeMotor);
   }
 
   public void runIntake(double motorSpeed){
@@ -39,10 +41,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(0.0);
   }
   public void extendIntake(){
-    // intakeSolenoid.set(kForward);
+     intakeSolenoid.set(kForward);
   }
   public void retractIntake(){
-    // intakeSolenoid.set(kReverse);
+     intakeSolenoid.set(kReverse);
   }
 
 

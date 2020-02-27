@@ -39,7 +39,8 @@ public class DriveWithJoysticks extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(leftJoystick.getY(), rightJoystick.getY());
+    //THESE ARE INVERSE OF WHAT THEY SHOULD BE, ALLISON JUST WANTED THEM THAT WAY FOR TESTING
+    drivetrain.drive(-leftJoystick.getY(), -rightJoystick.getY());
   }
 
   // Called once the command ends or is interrupted.

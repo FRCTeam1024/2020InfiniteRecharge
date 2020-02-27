@@ -113,8 +113,8 @@ public class RobotContainer {
   //  runIntake.whenActive(new RunIntake(intake, 0.25));
 
     // below done with Marc
-    runClimberHookUp.whileHeld(new RunClimberHook(climber, 0.25));
-    runClimberHookDown.whileHeld(new RunClimberHook(climber, -0.25));
+    runClimberHookUp.whileHeld(new RunClimberHook(climber, 0.50));
+    runClimberHookDown.whileHeld(new RunClimberHook(climber, -0.50));
 
    // runLeftClimberButtonUp.whileHeld(new RunClimberLeft(climber, 0.25));
   //  runLeftClimberButtonDown.whileHeld(new RunClimberLeft(climber, -0.25));
