@@ -9,13 +9,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends SubsystemBase {
 
-  private WPI_TalonSRX frontRight;
+  public WPI_TalonSRX frontRight;
   private WPI_TalonSRX middleRight;
   private WPI_TalonSRX rearRight;
   public WPI_TalonSRX frontLeft; // This is being used as the encoder
@@ -27,9 +28,11 @@ public class Drivetrain extends SubsystemBase {
    */
   public Drivetrain() {
     frontRight = new WPI_TalonSRX(20);
+    frontRight.getSelectedSensorPosition();
     middleRight = new WPI_TalonSRX(11);
     rearRight = new WPI_TalonSRX(4);
     frontLeft = new WPI_TalonSRX(6);
+    frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     middleLeft = new WPI_TalonSRX(5);
     rearLeft = new WPI_TalonSRX(8);
   }
@@ -85,20 +88,24 @@ public class Drivetrain extends SubsystemBase {
 		drive(0.0, 0.0);
   }
 
-  // public double getLeftEncoderInches() {
-  //   return frontLeft.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
-  //   //wheel diameter: 6 in
-  // }
+  public double velocityToSpeed(double velocity) {
+    return velocity / 16; // 16 inches per second max
+  }
+
+  public double getLeftEncoderInches() {
+     return frontLeft.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
+     //wheel diameter: 6 in
+   }
   
-	// public double getRightEncoderInches() {
-  //   return frontRight.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
-  //   //wheel diameter: 6 in
-  // }
+	public double getRightEncoderInches() {
+     return frontRight.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
+     //wheel diameter: 6 in
+   }
   
-	// public void resetEncoders() {
-  //   frontLeft.setSelectedSensorPosition(0);
-  //   frontRight.setSelectedSensorPosition(0);
-  // }
+	public void resetEncoders() {
+     frontLeft.setSelectedSensorPosition(0);
+     frontRight.setSelectedSensorPosition(0);
+   }
 
   public float getHeading() {
       // put it behind a method for now because we're not sure if we're using yaw, if the
