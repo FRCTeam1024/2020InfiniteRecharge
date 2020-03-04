@@ -44,6 +44,14 @@ public class Shooter extends SubsystemBase {
     setUpShuffleboard();
   }
 
+  public boolean isAtMaxRPM() {
+    return shooterEncoderOne.getVelocity() > 5500;
+  }
+
+  public boolean isNotAtMaxRPM() {
+    return shooterEncoderOne.getVelocity() < 5500;
+  }
+
   public CANEncoder getEncoder() {
     return shooterEncoderOne;
   }

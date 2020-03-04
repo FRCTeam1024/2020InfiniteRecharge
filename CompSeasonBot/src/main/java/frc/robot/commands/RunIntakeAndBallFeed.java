@@ -6,21 +6,24 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
 
-public class RunClimberHook extends CommandBase {
-  private Climber climber;
-  private double motorPower;
+public class RunIntakeAndBallFeed extends CommandBase {
   /**
-   * Creates a new RunClimberHook.
+   * Creates a new RunIntake.
    */
-  public RunClimberHook(Climber climber, double motorPower) {
-    this.climber = climber;
-    this.motorPower = motorPower;
+  Intake intake;
+  BallFeed ballFeed;
+    double intakeSpeed;
+    double ballFeedSpeed;
+  public RunIntakeAndBallFeed(Intake intake, BallFeed ballFeed, double intakeSpeed, double ballFeedSpeed) {
+    this.intake = intake;
+    this.ballFeed = ballFeed;
+    this.intakeSpeed = intakeSpeed;
+    this.ballFeedSpeed = ballFeedSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-   // addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -31,13 +34,15 @@ public class RunClimberHook extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveClimberHook(motorPower);
+    intake.runIntake(intakeSpeed);
+    ballFeed.runBallFeedMotor(ballFeedSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.moveClimberHook(0.0);
+    intake.stopIntake();
+    ballFeed.stopBallFeedMotor();
   }
 
   // Returns true when the command should end.

@@ -5,22 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
-
+package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
 
-public class RunClimberHook extends CommandBase {
-  private Climber climber;
-  private double motorPower;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
+
+public class FailSafeAutoWithVelocity extends CommandBase {
   /**
-   * Creates a new RunClimberHook.
+   * Creates a new failSafeAuto.
    */
-  public RunClimberHook(Climber climber, double motorPower) {
-    this.climber = climber;
-    this.motorPower = motorPower;
+  Shooter shooter;
+  BallFeed ballFeed;
+  double shooterMotorSpeed;
+  double ballFeedSpeed;
+  double shooterFeedSpeed;
+  public FailSafeAutoWithVelocity(Shooter shooter, BallFeed ballFeed, double shooterMotorSpeed, double ballFeedSpeed, double shooterFeedSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
-   // addRequirements(climber);
+    this.shooter = shooter;
+    this.ballFeed = ballFeed;
+    this.shooterMotorSpeed = shooterMotorSpeed;
+    this.ballFeedSpeed = ballFeedSpeed;
   }
 
   // Called when the command is initially scheduled.
@@ -31,13 +36,25 @@ public class RunClimberHook extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.moveClimberHook(motorPower);
+    if(shooter.isAtMaxRPM() == false){
+      shooter.runShooterMotors(shooterMotorSpeed);
+    }
+    else if(shooter.isAtMaxRPM() == true){
+      ballFeed.runBallFeedMotor(ballFeedSpeed);
+      ballFeed.runShooterFeedMotor(shooterFeedSpeed);
+      shooter.runShooterMotors(shooterMotorSpeed);
+      
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.moveClimberHook(0.0);
+    
+    ballFeed.runBallFeedMotor(0.0);
+    ballFeed.runShooterFeedMotor(0.0);
+    shooter.runShooterMotors(0.0);
   }
 
   // Returns true when the command should end.
