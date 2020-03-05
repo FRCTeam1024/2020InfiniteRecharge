@@ -14,6 +14,6 @@ public class RunBothFeeders extends ParallelCommandGroup {
   public RunBothFeeders(BallFeed ballFeed) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    super(new RunShooterFeed(ballFeed, 1.0), new RunBallFeed(ballFeed, -0.50));
+    super(new RunShooterFeed(ballFeed, -1.0), new RunBallFeed(ballFeed, 0.50));
   }
 }

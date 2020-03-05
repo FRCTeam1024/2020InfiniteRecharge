@@ -16,7 +16,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import frc.robot.commands.auto.FailSafeAuto;
+import frc.robot.commands.auto.FailSafeAutoBackward;
+import frc.robot.commands.auto.FailSafeAutoForward;
+
 import frc.robot.commands.auto.FailSafeAutoWithVelocity;
 import frc.robot.commands.auto.LimelightCenter;
 import frc.robot.commands.auto.SequentialShooter;
@@ -63,19 +65,23 @@ public class RobotContainer {
   
   public JoystickButton xboxButtonA = new JoystickButton(xboxController, XboxController.Button.kA.value);
   public JoystickButton xboxButtonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
+  public JoystickButton xboxButtonY = new JoystickButton(xboxController, XboxController.Button.kY.value);
   
   public JoystickButton xboxRightBumper = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
   public JoystickButton xboxRightTrigger = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_RIGHT_TRIGGER);
   
   public Trigger xboxDPadUp = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.UP));
   public Trigger xboxDPadDown = new Trigger( () -> xboxController.getDPadState().equals(Logitech.DPadState.DOWN));
-
+//JUST FOR MARC
+  public JoystickButton runIntakeAndBallFeedJoystick = new JoystickButton(leftJoystick, 1);
+  public JoystickButton runShooterJoystick = new JoystickButton(rightJoystick, 3);
+  public JoystickButton runBothFeedersJoystick = new JoystickButton(rightJoystick, 1);
   public JoystickButton xBoxBackButton = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_BACK_BUTTON);
   public JoystickButton xboxStartButton = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_START_BUTTON);
 
 
   // private final Command m_autoCommand = new LimelightCenter(drivetrain);
-  private final Command m_autoCommand = new BasicDriveCommand(drivetrain);
+  private final Command m_autoCommand = new FailSafeAutoBackward(drivetrain, shooter, ballFeed, 1.0, 1.0, -1.0);
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
   private final DriveClimberDefault driveClimberDefault = new DriveClimberDefault(climber, xboxController);
@@ -107,6 +113,7 @@ public class RobotContainer {
 
     xboxButtonB.whileHeld(new RunClimberHook(climber, -0.50));
     xboxButtonA.whileHeld(new RunClimberHook(climber, 0.50));
+    xboxButtonY.toggleWhenActive(new RunShooter(shooter, .75));
 
     xboxLeftClimberStick.whenActive(new RunClimberLeft(climber, xboxController.getRawAxis(CONSTANTS_OI.XBOX_LEFT_STICK_Y_AXIS)));
     xboxRightClimberStick.whenActive(new RunClimberRight(climber, xboxController.getRawAxis(CONSTANTS_OI.XBOX_RIGHT_STICK_Y_AXIS)));
@@ -119,10 +126,13 @@ public class RobotContainer {
     //xboxLeftBumper.whileHeld(new RunIntake(intake, -.61));
     xboxLeftBumper.whileHeld(new RunIntakeAndBallFeed(intake, ballFeed, -0.35, -0.75));
 
+    runIntakeAndBallFeedJoystick.whileHeld(new RunIntakeAndBallFeed(intake, ballFeed, 0.35, 0.75));
+    runShooterJoystick.toggleWhenActive(new RunShooter(shooter, 1.0));
+    runBothFeedersJoystick.whileHeld(new RunBothFeeders(ballFeed));
     xboxDPadUp.toggleWhenActive(new ExtendIntake(intake));
     xboxDPadDown.toggleWhenActive(new RetractIntake(intake));
 
-    xboxRightBumper.toggleWhenPressed(new RunShooter(shooter, 1.0));
+    xboxRightBumper.toggleWhenPressed(new RunShooter(shooter, .9));
     xboxRightTrigger.whileHeld(new RunShooterFeed(ballFeed, -1.0));
 
     xboxStartButton.whileHeld(new RunBallFeed(ballFeed, 0.75));

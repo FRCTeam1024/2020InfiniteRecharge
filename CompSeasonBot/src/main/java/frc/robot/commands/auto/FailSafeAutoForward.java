@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class FailSafeAuto extends CommandBase {
+public class FailSafeAutoForward extends CommandBase {
   /**
    * Creates a new FailSafeAuto.
    */
@@ -20,13 +20,16 @@ public class FailSafeAuto extends CommandBase {
   double shooterSpeed;
   double ballFeedSpeed;
   double shooterFeedSpeed;
-  public FailSafeAuto(Shooter shooter, BallFeed ballFeed, double shooterSpeed, double ballFeedSpeed, double shooterFeedSpeed) {
+  Drivetrain drivetrain;
+  Boolean isFinished;
+  public FailSafeAutoForward(Drivetrain drivetrain, Shooter shooter, BallFeed ballFeed, double shooterSpeed, double ballFeedSpeed, double shooterFeedSpeed) {
     this.shooter = shooter;
     this.ballFeed = ballFeed;
-  
+    this.drivetrain = drivetrain;
     this.shooterSpeed = shooterSpeed;
     this.ballFeedSpeed = ballFeedSpeed;
     this.shooterFeedSpeed = shooterFeedSpeed;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,25 +41,55 @@ public class FailSafeAuto extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   // shooter.runShooterMotors(shooterSpeed);
+    shooter.runShooterMotors(shooterSpeed);
+    Timer.delay(3);
    // Timer.delay(3);
-   // shooter.runShooterMotors(shooterSpeed);    
     ballFeed.runShooterFeedMotor(shooterFeedSpeed);
-   // ballFeed.runBallFeedMotor(ballFeedSpeed);
+    ballFeed.runBallFeedMotor(ballFeedSpeed);
+    
+    
+    Timer.delay(0.15);
+
+    ballFeed.stopBallFeedMotor();
+    ballFeed.stopShooterFeedMotor();
+    Timer.delay(3);
+
+    ballFeed.runShooterFeedMotor(shooterFeedSpeed);
+    ballFeed.runBallFeedMotor(ballFeedSpeed);
+    Timer.delay(0.15);
+
+    ballFeed.stopBallFeedMotor();
+    ballFeed.stopShooterFeedMotor();
+    Timer.delay(3);
+
+    ballFeed.runShooterFeedMotor(shooterFeedSpeed);
+    ballFeed.runBallFeedMotor(ballFeedSpeed);
+
+    Timer.delay(0.15);
+    ballFeed.stopBallFeedMotor();
+    ballFeed.stopShooterFeedMotor();
+
+    isFinished = true;
+
+    drivetrain.drive(-.5, -.5);
+    Timer.delay(1);
+    drivetrain.drive(0.0, 0.0);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     
-  //  shooter.runShooterMotors(0.0);
+    shooter.runShooterMotors(0.0);
     ballFeed.runShooterFeedMotor(0.0);
-  //  ballFeed.runBallFeedMotor(0.0);
+    ballFeed.runBallFeedMotor(0.0);
+    drivetrain.drive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }
