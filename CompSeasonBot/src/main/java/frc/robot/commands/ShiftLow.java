@@ -6,22 +6,19 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RunClimberLeft extends CommandBase {
+public class ShiftLow extends CommandBase {
   /**
-   * Creates a new RunClimber.
+   * Creates a new ShiftHigh.
    */
-  Climber climber;
-  double motorSpeedOne;
-  public RunClimberLeft(Climber climber, double motorSpeedOne) {
-    this.climber = climber;
-    this.motorSpeedOne = motorSpeedOne;    
-
+  Boolean isFinished;
+  Drivetrain drivetrain;
+  public ShiftLow(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -32,19 +29,18 @@ public class RunClimberLeft extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    climber.climberMotorLeft.set(motorSpeedOne);
+    drivetrain.shiftLow();
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.climberMotorLeft.set(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

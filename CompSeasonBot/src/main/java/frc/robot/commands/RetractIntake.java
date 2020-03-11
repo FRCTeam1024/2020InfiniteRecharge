@@ -24,6 +24,8 @@ public class RetractIntake extends CommandBase {
   @Override
   public void execute() {
     intake.retractIntake();
+    System.out.println("retract intake");
+
     isFinished = true;
   }
 

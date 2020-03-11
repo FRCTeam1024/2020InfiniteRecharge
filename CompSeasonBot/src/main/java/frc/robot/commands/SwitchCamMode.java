@@ -6,40 +6,41 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.networktables.*;
+import frc.robot.*;
 
-public class RunClimberLeft extends CommandBase {
+public class SwitchCamMode extends CommandBase {
   /**
-   * Creates a new RunClimber.
+   * Creates a new SwitchCamMode.
    */
-  Climber climber;
-  double motorSpeedOne;
-  public RunClimberLeft(Climber climber, double motorSpeedOne) {
-    this.climber = climber;
-    this.motorSpeedOne = motorSpeedOne;    
-
+  private int camMode;
+  public SwitchCamMode(int camMode) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
+    this.camMode = camMode;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    climber.climberMotorLeft.set(motorSpeedOne);
+    if(camMode == 0){
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
+    }
+    if(camMode == 1){
+      NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.climberMotorLeft.set(0.0);
   }
 
   // Returns true when the command should end.

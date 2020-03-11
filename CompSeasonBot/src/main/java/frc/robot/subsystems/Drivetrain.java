@@ -12,9 +12,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class Drivetrain extends SubsystemBase {
-
+  // Was 0
+  public Solenoid shifter = new Solenoid(1);
   private WPI_TalonSRX frontRight;
   private WPI_TalonSRX middleRight;
   private WPI_TalonSRX rearRight;
@@ -86,7 +88,13 @@ public class Drivetrain extends SubsystemBase {
   public void stop() {
 		drive(0.0, 0.0);
   }
-
+  public void shiftLow(){
+    shifter.set(true);
+  }
+  
+  public void shiftHigh(){
+    shifter.set(false);
+  }
   // public double getLeftEncoderInches() {
   //   return frontLeft.getSelectedSensorPosition() * 1/70; //(1.0 / 71.0) * 4.0;
   //   //wheel diameter: 6 in

@@ -27,7 +27,9 @@ public class Intake extends SubsystemBase {
   private CANEncoder intakeEncoder;
   private CANSparkMax intakeMotor;
 
-   private final Solenoid intakeSolenoid = new Solenoid(1);
+  // Was 1
+  //testing it on port 2
+   private final Solenoid intakeSolenoid = new Solenoid(0);
 
   public Intake() {
     intakeMotor = new CANSparkMax(24, MotorType.kBrushless);
@@ -41,10 +43,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(0.0);
   }
   public void extendIntake(){
-    intakeSolenoid.set(true);
+    intakeSolenoid.set(false);
   }
   public void retractIntake(){
-     intakeSolenoid.set(false);
+     intakeSolenoid.set(true);
   }
 
 

@@ -30,6 +30,7 @@ public class ExtendIntake extends CommandBase {
   @Override
   public void execute() {
     intake.extendIntake();
+    System.out.println("extending intake");
     isFinished = true;
   }
 

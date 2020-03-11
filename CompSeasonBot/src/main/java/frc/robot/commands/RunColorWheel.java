@@ -6,22 +6,21 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
-import frc.robot.RobotContainer;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RunClimberLeft extends CommandBase {
+public class RunColorWheel extends CommandBase {
   /**
-   * Creates a new RunClimber.
+   * Creates a new RunColorWheel.
    */
-  Climber climber;
-  double motorSpeedOne;
-  public RunClimberLeft(Climber climber, double motorSpeedOne) {
-    this.climber = climber;
-    this.motorSpeedOne = motorSpeedOne;    
-
+  ColorWheel colorWheel;
+  double motorSpeed;
+  public RunColorWheel(ColorWheel colorWheel, double motorSpeed) {
+    this.colorWheel = colorWheel;
+    this.motorSpeed = motorSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -32,14 +31,13 @@ public class RunClimberLeft extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    climber.climberMotorLeft.set(motorSpeedOne);
+    colorWheel.runColorWheel(motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.climberMotorLeft.set(0.0);
+    colorWheel.stopColorWheel();
   }
 
   // Returns true when the command should end.
