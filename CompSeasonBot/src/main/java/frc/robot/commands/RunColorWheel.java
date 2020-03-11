@@ -6,21 +6,21 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RunShooter extends CommandBase {
-  
-  Shooter shooter;
-  double motorSpeeds;
-
-  // used when they're in leader/follower mode
-  public RunShooter(Shooter shooter, double motorSpeeds) {
-    this.shooter = shooter;
-    this.motorSpeeds = motorSpeeds;
-
+public class RunColorWheel extends CommandBase {
+  /**
+   * Creates a new RunColorWheel.
+   */
+  ColorWheel colorWheel;
+  double motorSpeed;
+  public RunColorWheel(ColorWheel colorWheel, double motorSpeed) {
+    this.colorWheel = colorWheel;
+    this.motorSpeed = motorSpeed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -31,14 +31,13 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
-    shooter.runShooterMotors(motorSpeeds);
+    colorWheel.runColorWheel(motorSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooterMotors();
+    colorWheel.stopColorWheel();
   }
 
   // Returns true when the command should end.

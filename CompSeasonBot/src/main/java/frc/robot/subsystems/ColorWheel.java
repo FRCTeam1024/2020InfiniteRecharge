@@ -6,42 +6,35 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climber extends SubsystemBase {
-  
-  
-  public final WPI_TalonSRX hookMotor = new WPI_TalonSRX(3);
-  public final WPI_TalonSRX climberMotorLeft = new WPI_TalonSRX(7);
-  public final WPI_TalonSRX climberMotorRight = new WPI_TalonSRX(14);
+public class ColorWheel extends SubsystemBase {
   /**
-   * Creates a new Climber.
+   * Creates a new ColorWheel.
    */
-  public Climber() {
-    
-  }
-  
-  public void moveClimber(double leftMotorPower, double rightMotorPower) {
-    climberMotorLeft.set(ControlMode.PercentOutput, leftMotorPower);
-    climberMotorRight.set(ControlMode.PercentOutput, rightMotorPower);
-  }  
+  private WPI_TalonSRX colorWheelMotor;
 
-  public void moveClimberHook(double motorPower){
-    hookMotor.set(ControlMode.PercentOutput, motorPower);
-  }  
+  public ColorWheel() {
+    colorWheelMotor = new WPI_TalonSRX(10);
 
-  public void stopClimber(){
-    climberMotorLeft.set(ControlMode.PercentOutput, 0.0);
-    climberMotorRight.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void runColorWheel(double motorSpeed){
+    colorWheelMotor.set(ControlMode.PercentOutput, motorSpeed);
+  }
+
+  public void stopColorWheel(){
+    colorWheelMotor.set(ControlMode.PercentOutput, 0.0);
   }
 }

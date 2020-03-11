@@ -9,18 +9,16 @@ package frc.robot.commands;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class RunShooter extends CommandBase {
-  
-  Shooter shooter;
-  double motorSpeeds;
-
-  // used when they're in leader/follower mode
-  public RunShooter(Shooter shooter, double motorSpeeds) {
-    this.shooter = shooter;
-    this.motorSpeeds = motorSpeeds;
-
+public class ShiftHigh extends CommandBase {
+  /**
+   * Creates a new ShiftHigh.
+   */
+  Boolean isFinished;
+  Drivetrain drivetrain;
+  public ShiftHigh(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -31,19 +29,18 @@ public class RunShooter extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // shooter.runShooterMotors(motorSpeedLeft, motorSpeedRight);
-    shooter.runShooterMotors(motorSpeeds);
+    drivetrain.shiftHigh();
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooterMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

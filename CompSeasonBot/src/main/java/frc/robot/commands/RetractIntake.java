@@ -7,10 +7,11 @@ public class RetractIntake extends CommandBase {
   /**
    * Creates a new ExtendIntake.
    */
-  boolean isFinished = false;
+  Boolean isFinished;
   Intake intake;
   public RetractIntake(Intake intake) {
     this.intake = intake;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,6 +24,8 @@ public class RetractIntake extends CommandBase {
   @Override
   public void execute() {
     intake.retractIntake();
+    System.out.println("retract intake");
+
     isFinished = true;
   }
 
@@ -34,6 +37,6 @@ public class RetractIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished();
+    return isFinished;
   }
 }

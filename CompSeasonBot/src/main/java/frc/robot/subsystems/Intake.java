@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kForward;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
@@ -18,18 +17,23 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
+  private CANEncoder intakeEncoder;
   private CANSparkMax intakeMotor;
 
-  // private final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
+  // Was 1
+  //testing it on port 2
+   private final Solenoid intakeSolenoid = new Solenoid(0);
 
   public Intake() {
-    intakeMotor = new CANSparkMax(0, MotorType.kBrushless);
+    intakeMotor = new CANSparkMax(24, MotorType.kBrushless);
+    intakeEncoder = new CANEncoder(intakeMotor);
   }
 
   public void runIntake(double motorSpeed){
@@ -39,10 +43,10 @@ public class Intake extends SubsystemBase {
     intakeMotor.set(0.0);
   }
   public void extendIntake(){
-    // intakeSolenoid.set(kForward);
+    intakeSolenoid.set(false);
   }
   public void retractIntake(){
-    // intakeSolenoid.set(kReverse);
+     intakeSolenoid.set(true);
   }
 
 

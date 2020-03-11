@@ -16,8 +16,8 @@ public class BallFeed extends SubsystemBase {
   /**
    * Creates a new BallFeed.
    */
-  private WPI_TalonSRX ballFeedMotor;
-  private WPI_TalonSRX shooterFeedMotor;
+  private WPI_TalonSRX ballFeedMotor; // this is the big white lower one
+  private WPI_TalonSRX shooterFeedMotor; // this is the small blue one
 
 
   public BallFeed() {

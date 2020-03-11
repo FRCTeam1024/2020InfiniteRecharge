@@ -13,10 +13,11 @@ public class ExtendIntake extends CommandBase {
   /**
    * Creates a new ExtendIntake.
    */
-  boolean isFinished = false;
+  Boolean isFinished;
   Intake intake;
   public ExtendIntake(Intake intake) {
     this.intake = intake;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -28,7 +29,8 @@ public class ExtendIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.stopIntake();
+    intake.extendIntake();
+    System.out.println("extending intake");
     isFinished = true;
   }
 
@@ -40,6 +42,6 @@ public class ExtendIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished();
+    return isFinished;
   }
 }

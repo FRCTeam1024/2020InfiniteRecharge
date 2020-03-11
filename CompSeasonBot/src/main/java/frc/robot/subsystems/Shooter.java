@@ -6,27 +6,69 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.RunShooter;
+import frc.robot.commands.RunShooterPID;
 
 public class Shooter extends SubsystemBase {
-  private CANSparkMax shooterOne;
+  private CANSparkMax shooterOne; // this is leader
   private CANSparkMax shooterTwo;
   private CANEncoder shooterEncoderOne;
   private CANEncoder shooterEncoderTwo;
 
+  private CANPIDController pidController;
+  
   /**
    * Creates a new Shooter.
    */
   public Shooter() {
     shooterOne = new CANSparkMax(39, MotorType.kBrushless);
     shooterTwo = new CANSparkMax(47, MotorType.kBrushless);
+    shooterOne.restoreFactoryDefaults();
+    shooterTwo.restoreFactoryDefaults();
+
+    pidController = shooterOne.getPIDController();
+    shooterTwo.follow(shooterOne, true);
+    
     shooterEncoderOne = shooterOne.getEncoder();
-    shooterEncoderTwo = shooterTwo.getEncoder();
+    // shooterEncoderTwo = shooterTwo.getEncoder();
+    
+    setUpShuffleboard();
   }
 
+  public boolean isAtMaxRPM() {
+    return shooterEncoderOne.getVelocity() > 5500;
+  }
+
+  public boolean isNotAtMaxRPM() {
+    return shooterEncoderOne.getVelocity() < 5500;
+  }
+
+  public CANEncoder getEncoder() {
+    return shooterEncoderOne;
+  }
+
+  public CANPIDController getPIDController() {
+    return pidController;
+  }
+
+  private void setUpShuffleboard() {
+    Shuffleboard.getTab("Shooter").add("Run Shooter", new RunShooter(this, 1.0));
+    // Shuffleboard.getTab("Shooter").add("Run Shooter PID", new RunShooterPID(this));
+    // Shuffleboard.getTab("Shooter").add(this);
+  }
+
+  public void runShooterMotors(double motorSpeeds) {
+    shooterOne.set(motorSpeeds);
+  }
 
   public void runShooterMotors(double motorOneSpeed, double motorTwoSpeed){
     shooterOne.set(motorOneSpeed);
@@ -56,5 +98,6 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Velocity", shooterEncoderOne.getVelocity());
   }
 }
