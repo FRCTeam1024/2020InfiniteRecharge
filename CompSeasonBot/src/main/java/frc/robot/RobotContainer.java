@@ -39,6 +39,7 @@ import edu.wpi.cscore.VideoMode;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -218,6 +219,9 @@ if(xboxController.getRightStickY() > 0.2 || xboxController.getRightStickY() < 0.
     SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
     SmartDashboard.putData("Sequential Shooter", new SequentialShooter(shooter, ballFeed));
     SmartDashboard.putData("Fail Safe Auto", new FailSafeAutoWithVelocity(shooter, ballFeed, 1.0, 1.0, 1.0));
+    SmartDashboard.putData("PID Gyro Aim", new PIDGyroAim(drivetrain, 65));
+    SmartDashboard.putData("Reset Gyro Senser", new ResetGyro(drivetrain));
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.ahrs.getAngle());
     Shuffleboard.getTab("Shooter").add("Run Shooter PID", new RunShooterPID(shooter));
   }
 
