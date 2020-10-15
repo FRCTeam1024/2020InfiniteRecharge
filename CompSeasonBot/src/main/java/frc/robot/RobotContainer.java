@@ -212,6 +212,8 @@ if(xboxController.getRightStickY() > 0.2 || xboxController.getRightStickY() < 0.
     SmartDashboard.putData("Extend Intake", new ExtendIntake(intake));
     SmartDashboard.putData("Retract Intake", new RetractIntake(intake));
     SmartDashboard.putData("Run BallFeed", new RunBallFeed(ballFeed, -0.50));
+    SmartDashboard.putData("Limelight Aim and Shoot", new LimelightShooter(drivetrain, shooter, ballFeed));
+    SmartDashboard.putData("Limelight Aim", new LimelightCenter(drivetrain));
     SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(ballFeed, 1.0));
     SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
     SmartDashboard.putData("Sequential Shooter", new SequentialShooter(shooter, ballFeed));
