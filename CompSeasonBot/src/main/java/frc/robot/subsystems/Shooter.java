@@ -21,7 +21,7 @@ import frc.robot.commands.RunShooterPID;
 public class Shooter extends SubsystemBase {
   private CANSparkMax shooterOne; // this is leader
   private CANSparkMax shooterTwo;
-  private CANEncoder shooterEncoderOne;
+  public CANEncoder shooterEncoderOne;
   private CANEncoder shooterEncoderTwo;
 
   private CANPIDController pidController;
@@ -45,11 +45,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isAtMaxRPM() {
-    return shooterEncoderOne.getVelocity() > 5500;
+    return shooterEncoderOne.getVelocity() > 5200;
   }
 
   public boolean isNotAtMaxRPM() {
-    return shooterEncoderOne.getVelocity() < 5500;
+    return shooterEncoderOne.getVelocity() < 5000;
   }
 
   public CANEncoder getEncoder() {

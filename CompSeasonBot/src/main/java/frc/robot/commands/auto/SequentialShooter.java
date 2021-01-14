@@ -15,11 +15,11 @@ public class SequentialShooter extends SequentialCommandGroup {
   public SequentialShooter(Shooter shooter, BallFeed ballFeed) {
      // Add your commands in the super() call, e.g.
      super(new WaitUntilCommand(shooter::isAtMaxRPM),
-          new RunBothFeeders(ballFeed).withTimeout(1),
+          new RunBothFeeders(ballFeed).withInterrupt(shooter::isNotAtMaxRPM),
           new WaitUntilCommand(shooter::isAtMaxRPM),
-          new RunBothFeeders(ballFeed).withTimeout(1),
+          new RunBothFeeders(ballFeed).withInterrupt(shooter::isNotAtMaxRPM),
           new WaitUntilCommand(shooter::isAtMaxRPM),
-          new RunBothFeeders(ballFeed).withTimeout(1)
+          new RunBothFeeders(ballFeed).withInterrupt(shooter::isNotAtMaxRPM)
           );
           System.out.println("running SequentialShooter");
   }

@@ -18,11 +18,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.auto.AutoSequentialShooter;
 import frc.robot.commands.auto.FailSafeAutoBackward;
 import frc.robot.commands.auto.FailSafeAutoForward;
 
 import frc.robot.commands.auto.FailSafeAutoWithVelocity;
 import frc.robot.commands.auto.LimelightCenter;
+import frc.robot.commands.auto.LimelightShooter;
 import frc.robot.commands.auto.SequentialShooter;
 import frc.robot.commands.SwitchCamMode;
 import frc.robot.oi.CONSTANTS_OI;
@@ -37,6 +39,7 @@ import edu.wpi.cscore.VideoMode;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -57,9 +60,9 @@ public class RobotContainer {
   private final BallFeed ballFeed  = new BallFeed();
 
 
-  public Joystick leftJoystick = new Joystick(0);
-  public Joystick rightJoystick = new Joystick(1);
-  public Logitech xboxController = new Logitech(2);
+  public Joystick leftJoystick = new Joystick(1);
+  public Joystick rightJoystick = new Joystick(2);
+  public Logitech xboxController = new Logitech(0);
 
   
  // public JoystickButton runShooterAndBallFeed = new JoystickButton(leftJoystick, 6);
@@ -90,6 +93,11 @@ public class RobotContainer {
  // public JoystickButton runIntakeAndBallFeedJoystick = new JoystickButton(leftJoystick, 1);
  public JoystickButton shiftHighJoystick = new JoystickButton(leftJoystick, 3);
  public JoystickButton shiftLowJoystick = new JoystickButton(rightJoystick, 4);
+ 
+ public JoystickButton leftTrigger = new JoystickButton(leftJoystick, 1);
+ public JoystickButton rightTrigger = new JoystickButton(rightJoystick, 1);
+
+ 
 
   public JoystickButton switchCamModeDefault = new JoystickButton(leftJoystick, 2);
   public JoystickButton switchCamModeCamera = new JoystickButton(rightJoystick, 2);
@@ -98,8 +106,11 @@ public class RobotContainer {
   public JoystickButton xBoxBackButton = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_BACK_BUTTON);
   public JoystickButton xboxStartButton = new JoystickButton(xboxController, CONSTANTS_OI.XBOX_START_BUTTON);
 
+
   // private final Command m_autoCommand = new LimelightCenter(drivetrain);
-  private final Command m_autoCommand = new FailSafeAutoBackward(drivetrain, shooter, ballFeed, 1.0, 1.0, -1.0);
+  // private final Command m_autoCommand = new FailSafeAutoBackward(drivetrain, shooter, ballFeed, 1.0, 1.0, -1.0);
+  private final Command m_autoCommand = new AutoSequentialShooter(shooter, ballFeed);
+// 
 
   private final DriveWithJoysticks driveWithJoysticks = new DriveWithJoysticks(drivetrain, leftJoystick, rightJoystick);
   private final DriveClimberDefault driveClimberDefault = new DriveClimberDefault(climber, xboxController);
@@ -111,7 +122,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     drivetrain.setDefaultCommand(driveWithJoysticks);
-    climber.setDefaultCommand(driveClimberDefault);
+    // climber.setDefaultCommand(driveClimberDefault);
   }
 
   /**
@@ -141,6 +152,10 @@ public class RobotContainer {
 
     shiftHighJoystick.toggleWhenPressed(new ShiftHigh(drivetrain));
     shiftLowJoystick.toggleWhenPressed(new ShiftLow(drivetrain));
+
+    leftTrigger.whenPressed(new LimelightCenter(drivetrain));
+    rightTrigger.whenPressed(new LimelightShooter(drivetrain, shooter, ballFeed));
+
     //DEAD BAND FOR LOGITECH JOYSTICK CONTROLLERS
 if(xboxController.getLeftStickY() > 0.2 || xboxController.getLeftStickY() < 0.2){
   xboxLeftClimberStick.whenActive(new RunClimberLeft(climber, xboxController.getRawAxis(CONSTANTS_OI.XBOX_LEFT_STICK_Y_AXIS)));
@@ -185,6 +200,7 @@ if(xboxController.getRightStickY() > 0.2 || xboxController.getRightStickY() < 0.
     SmartDashboard.putData("Run Intake", new RunIntake(intake, 0.35));
 
     SmartDashboard.putData("Run Shooter", new RunShooter(shooter, 1.0));
+    // SmartDashboard.putNumber("Velocity", shooter.shooterEncoderOne.getVelocity());
 
     SmartDashboard.putData("Run Climber One", new RunClimberLeft(climber, 0.35));
     SmartDashboard.putData("Stop Climber", new StopClimber(climber));
@@ -199,10 +215,15 @@ if(xboxController.getRightStickY() > 0.2 || xboxController.getRightStickY() < 0.
     SmartDashboard.putData("Extend Intake", new ExtendIntake(intake));
     SmartDashboard.putData("Retract Intake", new RetractIntake(intake));
     SmartDashboard.putData("Run BallFeed", new RunBallFeed(ballFeed, -0.50));
+    SmartDashboard.putData("Limelight Aim and Shoot", new LimelightShooter(drivetrain, shooter, ballFeed));
+    SmartDashboard.putData("Limelight Aim", new LimelightCenter(drivetrain));
     SmartDashboard.putData("Run ShooterFeed", new RunShooterFeed(ballFeed, 1.0));
     SmartDashboard.putData("Drive", new BasicDriveCommand(drivetrain));
     SmartDashboard.putData("Sequential Shooter", new SequentialShooter(shooter, ballFeed));
     SmartDashboard.putData("Fail Safe Auto", new FailSafeAutoWithVelocity(shooter, ballFeed, 1.0, 1.0, 1.0));
+    SmartDashboard.putData("PID Gyro Aim", new PIDGyroAim(drivetrain, 65));
+    SmartDashboard.putData("Reset Gyro Senser", new ResetGyro(drivetrain));
+    SmartDashboard.putNumber("Gyro Angle", drivetrain.ahrs.getAngle());
     Shuffleboard.getTab("Shooter").add("Run Shooter PID", new RunShooterPID(shooter));
   }
 

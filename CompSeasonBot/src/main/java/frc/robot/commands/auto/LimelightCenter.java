@@ -17,6 +17,8 @@ import frc.robot.subsystems.Drivetrain;
 public class LimelightCenter extends CommandBase {
 
   private final Drivetrain drivetrain;
+  private int sequences = 0;
+  public double drivetrainSpeed = .4;
 
   NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry xOffset = limelight.getEntry("tx");
@@ -35,6 +37,7 @@ public class LimelightCenter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    sequences = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +45,7 @@ public class LimelightCenter extends CommandBase {
   public void execute() {
     final double minimumSpeed = SmartDashboard.getNumber("Minimum Speed", 0.20);
     
-    double drivetrainSpeed = .5; 
+    drivetrainSpeed = .4; 
     //Gets centering tolerance from SmartDashboard
     double tolerance = SmartDashboard.getNumber("Tolerance", 1.5);
     
@@ -58,6 +61,7 @@ public class LimelightCenter extends CommandBase {
       } else {
         // within 0.5 so stop/coast
         drivetrain.drive(0.0, 0.0);
+        sequences++;
       } 
     }
 
@@ -88,6 +92,6 @@ public class LimelightCenter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return sequences >= 15 || drivetrainSpeed == 0.0;
   }
 }

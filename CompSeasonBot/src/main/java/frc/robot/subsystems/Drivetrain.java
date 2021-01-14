@@ -9,8 +9,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -23,6 +25,7 @@ public class Drivetrain extends SubsystemBase {
   public WPI_TalonSRX frontLeft; // This is being used as the encoder
   private WPI_TalonSRX middleLeft;
   private WPI_TalonSRX rearLeft;
+  public AHRS ahrs;
     
   /**
    * Creates a new Drivetrain.
@@ -34,6 +37,8 @@ public class Drivetrain extends SubsystemBase {
     frontLeft = new WPI_TalonSRX(6);
     middleLeft = new WPI_TalonSRX(5);
     rearLeft = new WPI_TalonSRX(8);
+
+    ahrs = new AHRS(SerialPort.Port.kMXP); // ONLY when connected directly to RIO
   }
 
   @Override
@@ -90,6 +95,10 @@ public class Drivetrain extends SubsystemBase {
   }
   public void shiftLow(){
     shifter.set(true);
+  }
+
+  public void resetGyro() {
+    ahrs.reset();
   }
   
   public void shiftHigh(){
